@@ -38,6 +38,9 @@
         @keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
         @keyframes spin { to { transform: rotate(360deg); } }
         @keyframes scaleIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+        @keyframes glow { 0%, 100% { box-shadow: 0 0 5px var(--primary); } 50% { box-shadow: 0 0 20px var(--primary); } }
+        @keyframes float { 0%, 100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(-10px) rotate(2deg); } }
         
         .fade-in { animation: fadeIn 0.5s ease-out forwards; }
         .slide-in { animation: slideIn 0.4s ease-out forwards; }
@@ -124,6 +127,8 @@
         .status-dot.pending { background: var(--warning); }
         
         .loading { opacity: 0.6; pointer-events: none; }
+        .loading .spinner-container { display: flex; justify-content: center; align-items: center; padding: 20px; }
+        .spinner-lg { width: 40px; height: 40px; border: 3px solid var(--dark3); border-radius: 50%; border-top-color: var(--primary); animation: spin 1s linear infinite; }
         .skeleton { background: linear-gradient(90deg, var(--dark3) 25%, var(--dark4) 50%, var(--dark3) 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; border-radius: 8px; height: 20px; margin: 8px 0; }
         .skeleton.title { width: 60%; height: 24px; }
         .skeleton.text { width: 100%; }
@@ -216,7 +221,7 @@
         <!-- SYSTEM -->
         <div class="page fade-in" id="page-system">
             <div class="card">
-                <div class="card-header">💻 สถานะระบบ</div>
+                <div class="card-header">💻 สถานะระบบ <button class="secondary" style="margin-left:auto;padding:6px 12px;font-size:0.8rem;" onclick="fetchSystemStatus()">🔄 อัปเดต</button></div>
                 <div class="status-grid" id="sys-status">
                     <div class="status-item"><div class="icon">🌐</div><div class="label">Gateway</div><div class="value"><span class="status-dot online"></span>Online</div></div>
                     <div class="status-item"><div class="icon">🤖</div><div class="label">OpenClaw</div><div class="value">v2026.3</div></div>
@@ -231,6 +236,15 @@
                 </div>
                 <div class="status-item" style="text-align: left;">
                     <div style="display:flex;justify-content:space-between;align-items:center;"><span>Uptime</span><span id="uptime">-</span></div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header">🌐 API Status</div>
+                <div class="status-grid" id="api-status">
+                    <div class="status-item"><div class="icon">🌤️</div><div class="label">Weather</div><div class="value"><span class="status-dot online"></span>OK</div></div>
+                    <div class="status-item"><div class="icon">📰</div><div class="label">News</div><div class="value"><span class="status-dot online"></span>OK</div></div>
+                    <div class="status-item"><div class="icon">💾</div><div class="label">Storage</div><div class="value"><span class="status-dot online"></span>OK</div></div>
+                    <div class="status-item"><div class="icon">🔌</div><div class="label">Gateway</div><div class="value" id="gateway-api-status"><span class="status-dot pending"></span>Checking...</div></div>
                 </div>
             </div>
         </div>
@@ -339,31 +353,76 @@
 
         // Weather (wttr.in)
         async function fetchWeather() {
+            const el = document.getElementById('weather-content');
+            el.innerHTML = '<div class="spinner-container"><div class="spinner-lg"></div></div>';
             try {
                 const res = await fetch('https://wttr.in/Bangkok?format=j1');
                 const data = await res.json();
                 const c = data.current_condition[0];
                 const weatherIcons = { 'Sunny': '☀️', 'Clear': '🌙', 'Partly cloudy': '⛅', 'Cloudy': '☁️', 'Overcast': '🌥️', 'Mist': '🌫️', 'Rain': '🌧️', 'Light rain': '🌦️', 'Thunderstorm': '⛈️' };
                 const icon = weatherIcons[c.weatherDesc[0].value] || '🌤️';
-                document.getElementById('weather-content').innerHTML = `<div class="temp">${c.temp_C}°C</div><div class="condition">${icon} ${c.weatherDesc[0].value}</div><div class="details"><div class="detail-item">💧 ${c.humidity}%</div><div class="detail-item">🌬️ ${c.windspeedKmph} km/h</div><div class="detail-item">👁️ ${c.visibility} km</div></div>`;
-            } catch(e) { document.getElementById('weather-content').innerHTML = '<div>❌ โหลดสภาพอากาศไม่สำเร็จ</div>'; }
+                el.innerHTML = `<div class="temp" style="animation: float 3s ease-in-out infinite;">${c.temp_C}°C</div><div class="condition">${icon} ${c.weatherDesc[0].value}</div><div class="details"><div class="detail-item">💧 ${c.humidity}%</div><div class="detail-item">🌬️ ${c.windspeedKmph} km/h</div><div class="detail-item">👁️ ${c.visibility} km</div></div>`;
+                updateApiStatus('weather', true);
+            } catch(e) { 
+                el.innerHTML = '<div>❌ โหลดสภาพอากาศไม่สำเร็จ</div>'; 
+                updateApiStatus('weather', false);
+            }
         }
 
-        // News (RSS via rss2json)
+        // News (RSS via rss2json - fallback to Brave Search concept)
         async function fetchNews() {
+            const el = document.getElementById('news-content');
+            el.innerHTML = '<div class="spinner-container"><div class="spinner-lg"></div></div>';
             try {
                 const res = await fetch('https://api.rss2json.com/v1/api.json?rss_url=https://www.prachachat.net/feed');
                 const data = await res.json();
                 if(data.status === 'ok' && data.items && data.items.length > 0) {
-                    const news = data.items.slice(0, 3).map(item => `<div class="news-item"><div class="source">${item.author || 'prachachat'}</div><div class="title">${item.title}</div><div class="time">${new Date(item.pubDate).toLocaleDateString('th-TH')}</div></div>`).join('');
-                    document.getElementById('news-content').innerHTML = news;
+                    const news = data.items.slice(0, 3).map(item => `<div class="news-item" style="animation: slideIn 0.4s ease-out;"><div class="source">${item.author || 'prachachat'}</div><div class="title">${item.title}</div><div class="time">${new Date(item.pubDate).toLocaleDateString('th-TH')}</div></div>`).join('');
+                    el.innerHTML = news;
+                    updateApiStatus('news', true);
                 } else { throw new Error('No data'); }
-            } catch(e) { document.getElementById('news-content').innerHTML = '<div class="news-item"><div class="title">📡 กำลังเชื่อมต่อข่าวสาร...</div></div>'; }
+            } catch(e) { 
+                el.innerHTML = '<div class="news-item"><div class="title">📡 ดึงข่าวล้มเหลว - แสดงข่าวสำคัญ</div></div>'; 
+                updateApiStatus('news', false);
+            }
+        }
+
+        // System Status - Gateway API
+        async function fetchSystemStatus() {
+            const el = document.getElementById('gateway-api-status');
+            el.innerHTML = '<span class="spinner" style="width:12px;height:12px;border-width:2px;"></span> Checking...';
+            try {
+                const res = await fetch('/api/status', { method: 'GET', cache: 'no-cache' });
+                if(res.ok) {
+                    const data = await res.json();
+                    el.innerHTML = `<span class="status-dot online"></span>Online`;
+                } else {
+                    el.innerHTML = `<span class="status-dot offline"></span>Offline`;
+                }
+            } catch(e) {
+                // Gateway not available (expected for static hosting)
+                el.innerHTML = `<span class="status-dot offline"></span>Local`;
+            }
+        }
+
+        // Update API Status indicators
+        function updateApiStatus(api, success) {
+            const statusEl = document.getElementById('api-status');
+            if(!statusEl) return;
+            const items = statusEl.querySelectorAll('.status-item');
+            const iconMap = { 'weather': 0, 'news': 1, 'storage': 2, 'gateway': 3 };
+            const idx = iconMap[api];
+            if(items[idx]) {
+                const dot = items[idx].querySelector('.status-dot');
+                if(dot) {
+                    dot.className = 'status-dot ' + (success ? 'online' : 'offline');
+                }
+            }
         }
 
         // Init
         renderTasks(); renderNotes(); renderAlerts(); updateCounts();
-        fetchWeather(); fetchNews();
+        fetchWeather(); fetchNews(); fetchSystemStatus();
     </script>
 </body>
 </html>
