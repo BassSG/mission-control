@@ -8,79 +8,76 @@
     <title>🎯 Mission Control</title>
     <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        :root { --primary: #6366f1; --secondary: #8b5cf6; --success: #10b981; --warning: #f59e0b; --danger: #ef4444; --dark: #0f172a; --dark2: #1e293b; --dark3: #334155; --text: #f8fafc; --text2: #94a3b8; --text3: #64748b; }
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        :root { --primary: #6366f1; --secondary: #8b5cf6; --success: #10b981; --warning: #f59e0b; --danger: #ef4444; --dark: #0f172a; --dark2: #1e293b; --dark3: #334155; --dark4: #475569; --text: #f8fafc; --text2: #94a3b8; --text3: #64748b; }
         html, body { height: 100%; }
         body { font-family: 'Prompt', sans-serif; background: var(--dark); color: var(--text); overflow: hidden; }
+        @media (min-width: 768px) { body { display: flex; justify-content: center; } .app { max-width: 480px; width: 100%; } }
         .app { height: 100%; display: flex; flex-direction: column; }
-        .header { background: linear-gradient(135deg, var(--dark2), var(--dark3)); padding: 16px 14px 12px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--dark3); flex-shrink: 0; }
-        .header-left { display: flex; align-items: center; gap: 10px; }
-        .header-icon { width: 40px; height: 40px; background: linear-gradient(135deg, var(--primary), var(--secondary)); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; box-shadow: 0 4px 15px rgba(99,102,241,0.4); }
-        .header h1 { font-size: 1.15rem; font-weight: 700; }
-        .header-btn { width: 36px; height: 36px; background: var(--dark3); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 16px; cursor: pointer; }
-        .scroll { flex: 1; overflow-y: auto; overflow-x: hidden; -webkit-overflow-scrolling: touch; padding: 14px; padding-bottom: 100px; }
-        .page-title { font-size: 1.1rem; font-weight: 600; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
-        .card-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 18px; }
-        .card { background: linear-gradient(150deg, var(--dark2), var(--dark3)); border-radius: 14px; padding: 14px 8px; text-align: center; cursor: pointer; transition: 0.2s; border: 1px solid transparent; }
-        .card:active { transform: scale(0.95); }
-        .card.active { border-color: var(--primary); }
-        .card-icon { font-size: 24px; margin-bottom: 6px; }
-        .card-label { font-size: 0.68rem; font-weight: 600; }
-        .big-card { background: linear-gradient(150deg, var(--dark2), var(--dark3)); border-radius: 18px; padding: 18px; margin-bottom: 14px; cursor: pointer; border-left: 5px solid var(--primary); transition: 0.2s; }
-        .big-card:active { transform: scale(0.98); }
-        .big-card.gold { border-left-color: #fbbf24; }
-        .big-card.bitcoin { border-left-color: #f97316; }
-        .big-card h3 { font-size: 0.95rem; font-weight: 600; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
-        .big-card .price { font-size: 1.4rem; font-weight: 700; margin-bottom: 4px; }
-        .big-card .change { font-size: 0.85rem; font-weight: 500; }
-        .big-card .change.up { color: var(--success); }
-        .big-card .change.down { color: var(--danger); }
-        .command-box { background: var(--dark2); border-radius: 14px; padding: 14px; margin-bottom: 18px; border: 1px solid var(--dark3); }
-        .command-box input { width: 100%; background: var(--dark3); border: none; border-radius: 10px; padding: 12px 14px; color: var(--text); font-size: 0.95rem; font-family: inherit; outline: none; }
-        .command-box input::placeholder { color: var(--text3); }
-        .send-btn { background: linear-gradient(135deg, var(--primary), var(--secondary)); border: none; color: white; padding: 10px 20px; border-radius: 10px; font-weight: 600; margin-top: 10px; width: 100%; cursor: pointer; }
-        .quick-cmds { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px; }
-        .quick-cmd { background: var(--dark3); padding: 6px 12px; border-radius: 16px; font-size: 0.75rem; cursor: pointer; }
-        .quick-cmd:active { background: var(--primary); }
-        .status-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 5px; }
-        .status-dot.ok { background: var(--success); }
-        .status-dot.warn { background: var(--warning); }
-        .status-dot.err { background: var(--danger); }
-        .task-item { background: var(--dark2); border-radius: 12px; padding: 12px; margin-bottom: 8px; display: flex; align-items: center; gap: 10px; cursor: pointer; }
-        .task-item:active { background: var(--dark3); }
-        .task-check { width: 22px; height: 22px; border: 2px solid var(--dark4); border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 12px; cursor: pointer; }
+        .header { background: linear-gradient(135deg, var(--primary), var(--secondary)); padding: 16px; display: flex; align-items: center; justify-content: space-between; }
+        .header-left { display: flex; align-items: center; gap: 12px; }
+        .header-icon { width: 42px; height: 42px; background: rgba(255,255,255,0.2); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px; }
+        .header h1 { font-size: 1.2rem; font-weight: 700; }
+        .header-btn { width: 36px; height: 36px; background: rgba(255,255,255,0.15); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 16px; cursor: pointer; }
+        .scroll { flex: 1; overflow-y: auto; overflow-x: hidden; padding: 16px; padding-bottom: 90px; }
+        .page-title { font-size: 1.05rem; font-weight: 600; margin-bottom: 12px; }
+        .nav-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 16px; }
+        .nav-card { background: var(--dark2); border-radius: 14px; padding: 12px 8px; text-align: center; cursor: pointer; border: 2px solid transparent; }
+        .nav-card.active { border-color: var(--primary); }
+        .nav-card .icon { font-size: 22px; }
+        .nav-card .label { font-size: 0.65rem; font-weight: 600; margin-top: 4px; }
+        .card { background: var(--dark2); border-radius: 16px; padding: 16px; margin-bottom: 12px; border-left: 4px solid var(--primary); }
+        .card.gold { border-left-color: #fbbf24; }
+        .card.btc { border-left-color: #f97316; }
+        .card h3 { font-size: 0.95rem; font-weight: 600; margin-bottom: 8px; }
+        .card .price { font-size: 1.35rem; font-weight: 700; margin-bottom: 4px; }
+        .card .change { font-size: 0.85rem; font-weight: 500; }
+        .card .change.up { color: var(--success); }
+        .card .change.down { color: var(--danger); }
+        .input-box { background: var(--dark2); border-radius: 14px; padding: 14px; margin-bottom: 14px; }
+        .input-box input, .input-box textarea, .input-box select { width: 100%; background: var(--dark3); border: none; border-radius: 10px; padding: 12px; color: var(--text); font-size: 0.95rem; font-family: inherit; outline: none; margin-bottom: 8px; }
+        .input-box textarea { resize: none; height: 80px; }
+        .btn { background: linear-gradient(135deg, var(--primary), var(--secondary)); border: none; color: white; padding: 12px 20px; border-radius: 10px; font-weight: 600; cursor: pointer; width: 100%; }
+        .btn-row { display: flex; gap: 8px; }
+        .btn-small { padding: 10px; }
+        .btn.high { background: var(--danger); }
+        .btn.med { background: var(--warning); }
+        .btn.low { background: var(--success); }
+        .quick-btns { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px; }
+        .quick-btn { background: var(--dark3); padding: 6px 12px; border-radius: 16px; font-size: 0.72rem; cursor: pointer; }
+        .task-item { background: var(--dark2); border-radius: 12px; padding: 12px; margin-bottom: 8px; display: flex; align-items: center; gap: 10px; }
+        .task-check { width: 22px; height: 22px; border: 2px solid var(--dark3); border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 11px; cursor: pointer; }
         .task-check.done { background: var(--success); border-color: var(--success); }
         .task-content { flex: 1; }
         .task-title { font-size: 0.9rem; font-weight: 500; }
-        .task-meta { font-size: 0.7rem; color: var(--text2); margin-top: 2px; }
+        .task-due { font-size: 0.7rem; color: var(--text2); }
         .task-priority { padding: 3px 8px; border-radius: 8px; font-size: 0.6rem; font-weight: 600; }
         .task-priority.high { background: rgba(239,68,68,0.2); color: var(--danger); }
         .task-priority.med { background: rgba(245,158,11,0.2); color: var(--warning); }
         .task-priority.low { background: rgba(16,185,129,0.2); color: var(--success); }
-        .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; margin-bottom: 14px; }
-        .cal-day { text-align: center; padding: 8px 4px; border-radius: 8px; font-size: 0.75rem; }
-        .cal-day.header { color: var(--text2); font-weight: 600; }
-        .cal-day.today { background: var(--primary); font-weight: 700; }
-        .cal-day.has-event { background: var(--dark3); }
-        .cron-item { background: var(--dark2); border-radius: 12px; padding: 12px; margin-bottom: 8px; cursor: pointer; }
-        .cron-item-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
-        .cron-item h4 { font-size: 0.9rem; font-weight: 600; }
-        .cron-status { font-size: 0.7rem; display: flex; align-items: center; gap: 5px; }
-        .system-item { background: var(--dark2); border-radius: 12px; padding: 14px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
-        .system-item-left { display: flex; align-items: center; gap: 10px; }
-        .system-icon { font-size: 20px; }
-        .system-name { font-size: 0.95rem; font-weight: 500; }
+        .note-item { background: var(--dark2); border-radius: 12px; padding: 12px; margin-bottom: 8px; }
+        .note-title { font-size: 0.9rem; font-weight: 500; margin-bottom: 4px; }
+        .note-preview { font-size: 0.75rem; color: var(--text2); }
+        .alert-item { background: var(--dark2); border-radius: 12px; padding: 12px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
+        .system-item { background: var(--dark2); border-radius: 12px; padding: 14px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
+        .system-left { display: flex; align-items: center; gap: 10px; }
+        .system-name { font-size: 0.9rem; font-weight: 500; }
         .system-status { font-size: 0.8rem; font-weight: 600; }
         .system-status.ok { color: var(--success); }
-        .system-status.warn { color: var(--warning); }
-        .nav { position: fixed; bottom: 0; left: 0; right: 0; background: rgba(15,23,42,0.95); backdrop-filter: blur(25px); display: flex; padding: 6px 10px 26px; border-top: 1px solid var(--dark3); }
-        .nav-item { flex: 1; text-align: center; padding: 6px; opacity: 0.5; transition: 0.2s; border-radius: 10px; cursor: pointer; }
-        .nav-item:active { opacity: 1; }
+        .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; margin-bottom: 12px; }
+        .cal-day { text-align: center; padding: 8px 4px; border-radius: 8px; font-size: 0.72rem; }
+        .cal-day.header { color: var(--text2); font-weight: 600; }
+        .cal-day.today { background: var(--primary); font-weight: 700; }
+        .cal-day.event { background: var(--dark3); }
+        .nav { position: fixed; bottom: 0; left: 0; right: 0; background: rgba(15,23,42,0.95); backdrop-filter: blur(20px); display: flex; padding: 6px 10px 24px; border-top: 1px solid var(--dark3); }
+        @media (min-width: 768px) { .nav { max-width: 480px; left: 50%; transform: translateX(-50%); border-radius: 20px 20px 0 0; } }
+        .nav-item { flex: 1; text-align: center; padding: 6px; opacity: 0.5; cursor: pointer; }
         .nav-item.active { opacity: 1; }
-        .nav-item .icon { font-size: 20px; display: block; margin-bottom: 1px; }
-        .nav-item span { font-size: 0.62rem; font-weight: 600; }
+        .nav-item .icon { font-size: 20px; display: block; }
+        .nav-item span { font-size: 0.6rem; font-weight: 600; }
         .page { display: none; }
         .page.active { display: block; }
+        .empty { text-align: center; padding: 30px; color: var(--text2); }
     </style>
 </head>
 <body>
@@ -91,42 +88,39 @@
                 <div class="header-right"><div class="header-btn" onclick="refreshAll()">🔄</div></div>
             </div>
             <div class="scroll">
-                <div class="card-grid">
-                    <div class="card" onclick="goPage('jarvis')"><div class="card-icon">🤖</div><div class="card-label">Jarvis</div></div>
-                    <div class="card" onclick="goPage('trading')"><div class="card-icon">💰</div><div class="card-label">Trading</div></div>
-                    <div class="card" onclick="goPage('tasks')"><div class="card-icon">📋</div><div class="card-label">Tasks</div></div>
-                    <div class="card" onclick="goPage('calendar')"><div class="card-icon">📅</div><div class="card-label">Calendar</div></div>
-                    <div class="card" onclick="goPage('cron')"><div class="card-icon">⏰</div><div class="card-label">Cron</div></div>
-                    <div class="card" onclick="goPage('system')"><div class="card-icon">💻</div><div class="card-label">System</div></div>
-                    <div class="card" onclick="goPage('knowledge')"><div class="card-icon">📚</div><div class="card-label">Knowledge</div></div>
+                <div class="nav-grid">
+                    <div class="nav-card active" onclick="goPage('home')"><div class="icon">🏠</div><div class="label">Home</div></div>
+                    <div class="nav-card" onclick="goPage('jarvis')"><div class="icon">🤖</div><div class="label">Jarvis</div></div>
+                    <div class="nav-card" onclick="goPage('trading')"><div class="icon">💰</div><div class="label">Trading</div></div>
+                    <div class="nav-card" onclick="goPage('tasks')"><div class="icon">📋</div><div class="label">Tasks</div></div>
+                    <div class="nav-card" onclick="goPage('notes')"><div class="icon">📝</div><div class="label">Notes</div></div>
+                    <div class="nav-card" onclick="goPage('alerts')"><div class="icon">🔔</div><div class="label">Alerts</div></div>
+                    <div class="nav-card" onclick="goPage('calendar')"><div class="icon">📅</div><div class="label">Calendar</div></div>
+                    <div class="nav-card" onclick="goPage('system')"><div class="icon">💻</div><div class="label">System</div></div>
                 </div>
                 <div class="page-title">💰 Trading</div>
-                <div class="big-card gold" onclick="goPage('trading')"><h3>🟡 GOLD</h3><div class="price" id="gold-price">$5,171.50</div><div class="change up">▲ +$23.50 (+0.46%)</div></div>
-                <div class="big-card bitcoin" onclick="goPage('trading')"><h3>🟠 BTC</h3><div class="price" id="btc-price">$84,230</div><div class="change up">▲ +$1,230 (+1.48%)</div></div>
+                <div class="card gold"><h3>🟡 GOLD</h3><div class="price">$5,171.50</div><div class="change up">▲ +$23.50 (+0.46%)</div></div>
+                <div class="card btc"><h3>🟠 BTC</h3><div class="price">$84,230</div><div class="change up">▲ +$1,230 (+1.48%)</div></div>
                 <div class="page-title">📋 Tasks</div>
-                <div id="task-list-home"></div>
+                <div id="home-tasks"></div>
             </div>
         </div>
         
         <div class="page" id="page-jarvis">
             <div class="header"><div class="header-left"><div class="header-btn" onclick="goPage('home')">←</div><h1>🤖 Jarvis</h1></div></div>
             <div class="scroll">
-                <div class="command-box">
-                    <input type="text" id="jarvis-input" placeholder="พิมพ์คำสั่งให้ Jarvis..." onkeypress="if(event.key==='Enter')sendCommand()">
-                    <button class="send-btn" onclick="sendCommand()">📤 ส่งคำสั่ง</button>
-                    <div class="quick-cmds">
-                        <div class="quick-cmd" onclick="quickCmd('ราคาทองวันนี้')">📊 ราคาทอง</div>
-                        <div class="quick-cmd" onclick="quickCmd('ราคา BTC')">📈 ราคา BTC</div>
-                        <div class="quick-cmd" onclick="quickCmd('สร้าง Task')">📋 สร้าง Task</div>
-                        <div class="quick-cmd" onclick="quickCmd('นัดหมาย')">📅 นัดหมาย</div>
+                <div class="input-box">
+                    <input type="text" id="jarvis-input" placeholder="พิมพ์คำสั่ง..." onkeypress="if(event.key==='Enter')sendCommand()">
+                    <button class="btn" onclick="sendCommand()">📤 ส่งคำสั่ง</button>
+                    <div class="quick-btns">
+                        <div class="quick-btn" onclick="quickCmd('ราคาทอง')">📊 ราคาทอง</div>
+                        <div class="quick-btn" onclick="quickCmd('ราคา BTC')">📈 BTC</div>
+                        <div class="quick-btn" onclick="quickCmd('สร้าง Task')">📋 Task</div>
+                        <div class="quick-btn" onclick="quickCmd('สภาพอากาศ')">🌤️ อากาศ</div>
                     </div>
                 </div>
-                <div class="page-title">💬 การสนทนา</div>
                 <div id="chat-history">
-                    <div class="big-card" style="border-left-color:var(--success)">
-                        <h3>🤖 Jarvis</h3>
-                        <div class="body" style="color:var(--text2)">สวีสังคมค่ะพี่เบส! มีอะไรให้ช่วยไหมคะ? 💖</div>
-                    </div>
+                    <div class="card"><h3>🤖 Jarvis</h3><div style="color:var(--text2)">สวีสังคมค่ะพี่เบส! 💖</div></div>
                 </div>
             </div>
         </div>
@@ -134,61 +128,80 @@
         <div class="page" id="page-trading">
             <div class="header"><div class="header-left"><div class="header-btn" onclick="goPage('home')">←</div><h1>💰 Trading</h1></div><div class="header-right"><div class="header-btn" onclick="fetchPrices()">🔄</div></div></div>
             <div class="scroll">
-                <div class="big-card gold"><h3>🟡 GOLD (XAUUSD)</h3><div class="price" id="gold-price2">$5,171.50</div><div class="change up" id="gold-change2">▲ +$23.50 (+0.46%)</div></div>
-                <div class="big-card bitcoin"><h3>🟠 BTC/USD</h3><div class="price" id="btc-price2">$84,230</div><div class="change up" id="btc-change2">▲ +$1,230 (+1.48%)</div></div>
-                <div class="big-card"><h3>🇺🇸 USD/THB</h3><div class="price" id="usd-price">฿35.42</div><div class="change down" id="usd-change">▼ -$0.08 (-0.23%)</div></div>
+                <div class="card gold"><h3>🟡 GOLD (XAUUSD)</h3><div class="price" id="gold-price">$5,171.50</div><div class="change up">▲ +$23.50 (+0.46%)</div></div>
+                <div class="card btc"><h3>🟠 BTC/USD</h3><div class="price" id="btc-price">$84,230</div><div class="change up">▲ +$1,230 (+1.48%)</div></div>
+                <div class="card"><h3>🇺🇸 USD/THB</h3><div class="price">฿35.42</div><div class="change down">▼ -$0.08 (-0.23%)</div></div>
             </div>
         </div>
         
         <div class="page" id="page-tasks">
-            <div class="header"><div class="header-left"><div class="header-btn" onclick="goPage('home')">←</div><h1>📋 Tasks</h1></div><div class="header-right"><div class="header-btn" onclick="addTask()">+</div></div></div>
+            <div class="header"><div class="header-left"><div class="header-btn" onclick="goPage('home')">←</div><h1>📋 Tasks</h1></div><div class="header-right"><div class="header-btn" onclick="showAddTask()">+</div></div></div>
             <div class="scroll">
-                <div class="task-item" onclick="addTask()" style="background:var(--primary);justify-content:center"><span>+ เพิ่ม Task ใหม่</span></div>
+                <div class="input-box" id="add-task-box" style="display:none">
+                    <input type="text" id="new-task-title" placeholder="ชื่อ Task...">
+                    <div class="btn-row" style="margin-top:10px">
+                        <button class="btn btn-small high" onclick="addTask('high')">High</button>
+                        <button class="btn btn-small med" onclick="addTask('med')">Med</button>
+                        <button class="btn btn-small low" onclick="addTask('low')">Low</button>
+                    </div>
+                </div>
                 <div id="task-list"></div>
             </div>
         </div>
         
-        <div class="page" id="page-calendar">
-            <div class="header"><div class="header-left"><div class="header-btn" onclick="goPage('home')">←</div><h1>📅 Calendar</h1></div><div class="header-right"><div class="header-btn" onclick="fetchCalendar()">🔄</div></div></div>
+        <div class="page" id="page-notes">
+            <div class="header"><div class="header-left"><div class="header-btn" onclick="goPage('home')">←</div><h1>📝 Notes</h1></div><div class="header-right"><div class="header-btn" onclick="showAddNote()">+</div></div></div>
             <div class="scroll">
-                <div class="big-card">
-                    <h3>📅 มีนาคม 2026</h3>
-                    <div class="cal-grid">
-                        <div class="cal-day header">อา</div><div class="cal-day header">จ</div><div class="cal-day header">อ</div><div class="cal-day header">พ</div><div class="cal-day header">พฤ</div><div class="cal-day header">ศ</div><div class="cal-day header">ส</div>
-                        <div class="cal-day">1</div><div class="cal-day">2</div><div class="cal-day">3</div><div class="cal-day">4</div><div class="cal-day today">5</div><div class="cal-day">6</div><div class="cal-day">7</div>
-                        <div class="cal-day">8</div><div class="cal-day has-event">9</div><div class="cal-day">10</div>
-                    </div>
+                <div class="input-box" id="add-note-box" style="display:none">
+                    <input type="text" id="new-note-title" placeholder="หัวข้อ...">
+                    <textarea id="new-note-content" placeholder="เนื้อหา..."></textarea>
+                    <button class="btn" onclick="addNote()">💾 บันทึก</button>
                 </div>
-                <div class="page-title">📅 วันนี้</div>
-                <div id="calendar-events">
-                    <div class="task-item"><div class="task-content"><div class="task-title">🌅 Morning Brief</div><div class="task-meta">07:00 - เสร็จแล้ว</div></div></div>
-                    <div class="task-item"><div class="task-content"><div class="task-title">📚 สอนน้องหมิว</div><div class="task-meta">12:00 - นัดหมาย</div></div></div>
-                </div>
+                <div id="note-list"></div>
             </div>
         </div>
         
-        <div class="page" id="page-cron">
-            <div class="header"><div class="header-left"><div class="header-btn" onclick="goPage('home')">←</div><h1>⏰ Cron Jobs</h1></div></div>
-            <div class="scroll"><div id="cron-list"></div></div>
+        <div class="page" id="page-alerts">
+            <div class="header"><div class="header-left"><div class="header-btn" onclick="goPage('home')">←</div><h1>🔔 Price Alerts</h1></div><div class="header-right"><div class="header-btn" onclick="showAddAlert()">+</div></div></div>
+            <div class="scroll">
+                <div class="input-box" id="add-alert-box" style="display:none">
+                    <input type="text" id="new-alert-symbol" placeholder="สัญลักษณ์ (XAUUSD, BTC)">
+                    <input type="number" id="new-alert-price" placeholder="ราคาเป้าหมาย">
+                    <select id="new-alert-type">
+                        <option value="above">🔺 สูงกว่า</option>
+                        <option value="below">🔻 ต่ำกว่า</option>
+                    </select>
+                    <button class="btn" onclick="addAlert()">🔔 เพิ่ม Alert</button>
+                </div>
+                <div id="alert-list"></div>
+            </div>
+        </div>
+        
+        <div class="page" id="page-calendar">
+            <div class="header"><div class="header-left"><div class="header-btn" onclick="goPage('home')">←</div><h1>📅 Calendar</h1></div></div>
+            <div class="scroll">
+                <div class="card"><h3>📅 มีนาคม 2026</h3>
+                    <div class="cal-grid">
+                        <div class="cal-day header">อา</div><div class="cal-day header">จ</div><div class="cal-day header">อ</div><div class="cal-day header">พ</div><div class="cal-day header">พฤ</div><div class="cal-day header">ศ</div><div class="cal-day header">ส</div>
+                        <div class="cal-day">1</div><div class="cal-day">2</div><div class="cal-day">3</div><div class="cal-day">4</div><div class="cal-day today">5</div><div class="cal-day">6</div><div class="cal-day">7</div>
+                        <div class="cal-day">8</div><div class="cal-day event">9</div><div class="cal-day">10</div>
+                    </div>
+                </div>
+                <div class="page-title">📅 วันนี้</div>
+                <div class="card"><h3>🌅 Morning Brief</h3><div style="color:var(--text2)">07:00 - เสร็จแล้ว ✅</div></div>
+                <div class="card"><h3>📚 สอนน้องหมิว</h3><div style="color:var(--text2)">12:00 - นัดหมาย</div></div>
+            </div>
         </div>
         
         <div class="page" id="page-system">
             <div class="header"><div class="header-left"><div class="header-btn" onclick="goPage('home')">←</div><h1>💻 System</h1></div><div class="header-right"><div class="header-btn" onclick="fetchSystemStatus()">🔄</div></div></div>
             <div class="scroll">
-                <div class="system-item"><div class="system-item-left"><span class="system-icon">🌐</span><span class="system-name">Gateway</span></div><span class="system-status ok" id="sys-gateway">OK</span></div>
-                <div class="system-item"><div class="system-item-left"><span class="system-icon">🦞</span><span class="system-name">OpenClaw</span></div><span class="system-status ok" id="sys-openclaw">v2026.3.2</span></div>
-                <div class="system-item"><div class="system-item-left"><span class="system-icon">🤖</span><span class="system-name">Minimax</span></div><span class="system-status ok" id="sys-minimax">Ready</span></div>
-                <div class="system-item"><div class="system-item-left"><span class="system-icon">🔍</span><span class="system-name">Brave Search</span></div><span class="system-status ok" id="sys-brave">OK</span></div>
-                <div class="system-item"><div class="system-item-left"><span class="system-icon">📊</span><span class="system-name">FMP API</span></div><span class="system-status ok" id="sys-fmp">OK</span></div>
-                <div class="system-item"><div class="system-item-left"><span class="system-icon">📅</span><span class="system-name">Google Calendar</span></div><span class="system-status ok" id="sys-calendar">OK</span></div>
-            </div>
-        </div>
-        
-        <div class="page" id="page-knowledge">
-            <div class="header"><div class="header-left"><div class="header-btn" onclick="goPage('home')">←</div><h1>📚 Knowledge</h1></div></div>
-            <div class="scroll">
-                <div class="big-card" onclick="window.open('https://basssg.github.io/daily-knowledge/','_blank')"><h3>📱 Knowledge App</h3><div class="body" style="color:var(--text2)">เปิดแอปความรู้ →</div></div>
-                <div class="big-card" onclick="window.open('https://docs.google.com/spreadsheets/d/199EGCix13XC1urDD9d8PSPgFSsMYNHQ5MNFbzwA6lDI','_blank')"><h3>📋 Content Plan</h3><div class="body" style="color:var(--text2)">เปิด Google Sheet →</div></div>
+                <div class="system-item"><div class="system-left"><span>🌐</span><span class="system-name">Gateway</span></div><span class="system-status ok" id="sys-gw">OK</span></div>
+                <div class="system-item"><div class="system-left"><span>🦞</span><span class="system-name">OpenClaw</span></div><span class="system-status ok">v2026.3.2</span></div>
+                <div class="system-item"><div class="system-left"><span>🤖</span><span class="system-name">Minimax</span></div><span class="system-status ok">Ready</span></div>
+                <div class="system-item"><div class="system-left"><span>🔍</span><span class="system-name">Brave Search</span></div><span class="system-status ok" id="sys-brave">OK</span></div>
+                <div class="system-item"><div class="system-left"><span>📊</span><span class="system-name">FMP API</span></div><span class="system-status ok">OK</span></div>
+                <div class="system-item"><div class="system-left"><span>📚</span><span class="system-name">Knowledge App</span></div><span class="system-status ok" onclick="window.open('https://basssg.github.io/daily-knowledge/','_blank')">Open →</span></div>
             </div>
         </div>
         
@@ -197,96 +210,74 @@
             <div class="nav-item" onclick="goPage('jarvis')"><span class="icon">🤖</span><span>Jarvis</span></div>
             <div class="nav-item" onclick="goPage('trading')"><span class="icon">💰</span><span>Trading</span></div>
             <div class="nav-item" onclick="goPage('tasks')"><span class="icon">📋</span><span>Tasks</span></div>
-            <div class="nav-item" onclick="goPage('calendar')"><span class="icon">📅</span><span>Calendar</span></div>
+            <div class="nav-item" onclick="goPage('notes')"><span class="icon">📝</span><span>Notes</span></div>
         </nav>
     </div>
 
     <script>
-        let tasks = [
-            {id:1,title:'ทำรายงาน Trading Weekly',due:'Today',priority:'high',done:false},
-            {id:2,title:'ตรวจสอบ Cron Jobs',due:'Tomorrow',priority:'med',done:false},
-            {id:3,title:'อัปเดต Knowledge App',due:'7 มี.ค.',priority:'low',done:false},
-            {id:4,title:'ส่ง Email รายงาน',due:'4 มี.ค.',priority:'low',done:true}
-        ];
-        
-        let cronJobs = [
-            {name:'Morning Brief',time:'07:00',status:'ok',next:'6 มี.ค. 07:00'},
-            {name:'Midday Insight',time:'10:00',status:'ok',next:'6 มี.ค. 10:00'},
-            {name:'Evening Wrap',time:'19:00',status:'ok',next:'5 มี.ค. 19:00'},
-            {name:'Daily News',time:'06:30',status:'ok',next:'6 มี.ค. 06:30'},
-            {name:'Backup',time:'03:00',status:'ok',next:'6 มี.ค. 03:00'},
-            {name:'Price Alert',time:'Hourly',status:'off',next:'-'}
-        ];
+        const TaskManager = { key: 'mc_tasks', get() { return JSON.parse(localStorage.getItem(this.key)) || []; }, save(t) { localStorage.setItem(this.key, JSON.stringify(t)); }, add(title, p) { const t = this.get(); t.push({id: Date.now(), title, priority: p, due: new Date().toLocaleDateString('th-TH'), done: false}); this.save(t); }, toggle(id) { const t = this.get().find(x=>x.id===id); if(t) t.done=!t.done; this.save(this.get()); }, delete(id) { this.save(this.get().filter(x=>x.id!==id)); } };
+        const NoteManager = { key: 'mc_notes', get() { return JSON.parse(localStorage.getItem(this.key)) || []; }, save(t) { localStorage.setItem(this.key, JSON.stringify(t)); }, add(title, c) { const t = this.get(); t.unshift({id: Date.now(), title, content: c, date: new Date().toLocaleDateString('th-TH')}); this.save(t); }, delete(id) { this.save(this.get().filter(x=>x.id!==id)); } };
+        const AlertManager = { key: 'mc_alerts', get() { return JSON.parse(localStorage.getItem(this.key)) || []; }, save(t) { localStorage.setItem(this.key, JSON.stringify(t)); }, add(s, p, t) { const a = this.get(); a.push({id: Date.now(), symbol: s.toUpperCase(), price: parseFloat(p), type: t}); this.save(a); }, delete(id) { this.save(this.get().filter(x=>x.id!==id)); } };
         
         function goPage(page) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
             document.getElementById('page-'+page).classList.add('active');
-            const pages = ['home','jarvis','trading','tasks','calendar'];
-            document.querySelectorAll('.nav-item').forEach((n,i) => n.classList.toggle('active',i===pages.indexOf(page)));
+            const pages = ['home','jarvis','trading','tasks','notes'];
+            if(pages.includes(page)) document.querySelectorAll('.nav-item')[pages.indexOf(page)].classList.add('active');
             if(page==='tasks')renderTasks();
-            if(page==='cron')renderCronJobs();
-            if(page==='system')fetchSystemStatus();
+            if(page==='notes')renderNotes();
+            if(page==='alerts')renderAlerts();
+            if(page==='home')renderHomeTasks();
         }
         
         function renderTasks() {
-            document.getElementById('task-list').innerHTML = tasks.map(t => `
-                <div class="task-item">
-                    <div class="task-check ${t.done?'done':''}" onclick="toggleTask(${t.id})">${t.done?'✓':''}</div>
-                    <div class="task-content"><div class="task-title" style="${t.done?'text-decoration:line-through;opacity:0.5':''}">${t.title}</div><div class="task-meta">Due: ${t.due}</div></div>
-                    <div class="task-priority ${t.priority}">${t.priority.toUpperCase()}</div>
-                </div>`).join('');
-            document.getElementById('task-list-home').innerHTML = tasks.filter(t=>!t.done).slice(0,2).map(t => `
-                <div class="task-item"><div class="task-check" onclick="toggleTask(${t.id})"></div><div class="task-content"><div class="task-title">${t.title}</div><div class="task-meta">Due: ${t.due}</div></div><div class="task-priority ${t.priority}">${t.priority.toUpperCase()}</div></div>`).join('');
+            const t = TaskManager.get();
+            document.getElementById('task-list').innerHTML = t.length ? t.map(x => `<div class="task-item"><div class="task-check ${x.done?'done':''}" onclick="TaskManager.toggle(${x.id});renderTasks()">${x.done?'✓':''}</div><div class="task-content"><div class="task-title" style="${x.done?'text-decoration:line-through;opacity:0.5':''}">${x.title}</div><div class="task-due">${x.due}</div></div><div class="task-priority ${x.priority}">${x.priority.toUpperCase()}</div><div style="color:var(--danger);cursor:pointer" onclick="TaskManager.delete(${x.id});renderTasks()">🗑️</div></div>`).join('') : '<div class="empty">ยังไม่มี Task</div>';
         }
         
-        function toggleTask(id) { const t=tasks.find(x=>x.id===id); if(t){t.done=!t.done;renderTasks();} }
-        
-        function addTask() {
-            const title=prompt('ชื่อ Task:');
-            if(title){tasks.push({id:Date.now(),title,title,due:'Tomorrow',priority:'med',done:false});renderTasks();}
+        function renderHomeTasks() {
+            const t = TaskManager.get().filter(x=>!x.done).slice(0,3);
+            document.getElementById('home-tasks').innerHTML = t.length ? t.map(x => `<div class="task-item"><div class="task-check" onclick="TaskManager.toggle(${x.id});renderHomeTasks()"></div><div class="task-content"><div class="task-title">${x.title}</div><div class="task-due">${x.due}</div></div><div class="task-priority ${x.priority}">${x.priority.toUpperCase()}</div></div>`).join('') : '<div style="color:var(--text2);text-align:center;padding:10px">ไม่มีงานค้าง</div>';
         }
         
-        function renderCronJobs() {
-            document.getElementById('cron-list').innerHTML = cronJobs.map(c => `
-                <div class="big-card"><h3>${c.name}</h3><div class="change">${c.status==='ok'?'✅ Active':c.status==='off'?'⛔ Disabled':'❌ Failed'}</div><div class="task-meta">Schedule: ${c.time} | Next: ${c.next}</div></div>`).join('');
+        function renderNotes() {
+            const n = NoteManager.get();
+            document.getElementById('note-list').innerHTML = n.length ? n.map(x => `<div class="note-item"><div class="note-title">${x.title}</div><div class="note-preview">${x.content}</div><div style="color:var(--danger);cursor:pointer;margin-top:8px" onclick="NoteManager.delete(${x.id});renderNotes()">🗑️ ลบ</div></div>`).join('') : '<div class="empty">ยังไม่มี Note</div>';
         }
         
-        function fetchSystemStatus() {
-            document.getElementById('sys-gateway').textContent='OK';
-            document.getElementById('sys-openclaw').textContent='v2026.3.2';
-            document.getElementById('sys-minimax').textContent='Ready';
-            document.getElementById('sys-brave').textContent='OK';
-            document.getElementById('sys-fmp').textContent='OK';
-            document.getElementById('sys-calendar').textContent='OK';
+        function renderAlerts() {
+            const a = AlertManager.get();
+            document.getElementById('alert-list').innerHTML = a.length ? a.map(x => `<div class="alert-item"><div><div style="font-weight:600">${x.symbol}</div><div style="font-size:0.8rem;color:var(--text2)">${x.type==='above'?'🔺':'🔻'} ${x.price}</div></div><div style="color:var(--danger);cursor:pointer" onclick="AlertManager.delete(${x.id});renderAlerts()">🗑️</div></div>`).join('') : '<div class="empty">ยังไม่มี Alert</div>';
         }
         
-        function fetchPrices() {
-            document.getElementById('gold-price2').textContent='Loading...';
-            document.getElementById('btc-price2').textContent='Loading...';
-            // Simulate API call - in real app would call FMP
-            setTimeout(()=>{
-                document.getElementById('gold-price2').textContent='$5,171.50';
-                document.getElementById('gold-change2').innerHTML='▲ +$23.50 (+0.46%)';
-                document.getElementById('btc-price2').textContent='$84,230';
-                document.getElementById('btc-change2').innerHTML='▲ +$1,230 (+1.48%)';
-            },500);
-        }
+        function showAddTask() { document.getElementById('add-task-box').style.display = document.getElementById('add-task-box').style.display==='none'?'block':'none'; }
+        function showAddNote() { document.getElementById('add-note-box').style.display = document.getElementById('add-note-box').style.display==='none'?'block':'none'; }
+        function showAddAlert() { document.getElementById('add-alert-box').style.display = document.getElementById('add-alert-box').style.display==='none'?'block':'none'; }
+        
+        function addTask(p) { const t = document.getElementById('new-task-title').value.trim(); if(t){TaskManager.add(t,p);document.getElementById('new-task-title').value='';showAddTask();renderTasks();} }
+        function addNote() { const ti = document.getElementById('new-note-title').value.trim(); const c = document.getElementById('new-note-content').value.trim(); if(ti&&c){NoteManager.add(ti,c);document.getElementById('new-note-title').value='';document.getElementById('new-note-content').value='';showAddNote();renderNotes();} }
+        function addAlert() { const s = document.getElementById('new-alert-symbol').value.trim(); const p = document.getElementById('new-alert-price').value; const t = document.getElementById('new-alert-type').value; if(s&&p){AlertManager.add(s,p,t);document.getElementById('new-alert-symbol').value='';document.getElementById('new-alert-price').value='';showAddAlert();renderAlerts();} }
         
         function sendCommand() {
-            const input=document.getElementById('jarvis-input');
-            const cmd=input.value.trim();
+            const cmd = document.getElementById('jarvis-input').value.trim();
             if(!cmd)return;
-            const chat=document.getElementById('chat-history');
-            chat.innerHTML+=`<div class="big-card"><h3>👤 คุณเบส</h3><div class="body" style="color:var(--text2)">${cmd}</div></div>`;
-            chat.innerHTML+=`<div class="big-card" style="border-left-color:var(--success)"><h3>🤖 Jarvis</h3><div class="body" style="color:var(--text2)">ได้รับคำสั่งแล้วค่ะ: "${cmd}"<br>💖 กำลังดำเนินการ...</div></div>`;
-            input.value='';
+            const chat = document.getElementById('chat-history');
+            chat.innerHTML += `<div class="card"><h3>👤 คุณเบส</h3><div style="color:var(--text2)">${cmd}</div></div>`;
+            chat.innerHTML += `<div class="card"><h3>🤖 Jarvis</h3><div style="color:var(--text2)">ได้รับคำสั่ง: "${cmd}"<br>💖 กำลังดำเนินการ...</div></div>`;
+            document.getElementById('jarvis-input').value = '';
+            chat.parentElement.scrollTop = chat.parentElement.scrollHeight;
         }
         
-        function quickCmd(cmd) { document.getElementById('jarvis-input').value=cmd; sendCommand(); }
-        function refreshAll() { fetchPrices(); renderTasks(); renderCronJobs(); fetchSystemStatus(); }
+        function quickCmd(cmd) { document.getElementById('jarvis-input').value = cmd; sendCommand(); }
+        function refreshAll() { renderHomeTasks(); }
+        function fetchSystemStatus() { document.getElementById('sys-gw').textContent='OK'; document.getElementById('sys-brave').textContent='OK'; }
+        function fetchPrices() { document.getElementById('gold-price').textContent='$5,175.00'; document.getElementById('btc-price').textContent='$84,500'; }
         
         renderTasks();
-        renderCronJobs();
+        renderNotes();
+        renderAlerts();
+        renderHomeTasks();
     </script>
 </body>
 </html>
