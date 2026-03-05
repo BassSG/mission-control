@@ -2,163 +2,368 @@
 <html lang="th">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>🎯 Mission Control</title>
-    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <style>
         :root { 
-            --primary: #6366f1; --secondary: #8b5cf6;
-            --success: #10b981; --warning: #f59e0b; --danger: #ef4444;
-            --dark: #0f172a; --dark2: #1e293b; --dark3: #334155;
-            --text: #f8fafc; --text2: #94a3b8;
+            --primary: #6366f1; --primary-hover: #4f46e5;
+            --secondary: #8b5cf6; --secondary-hover: #7c3aed;
+            --success: #10b981; --success-light: #34d399;
+            --warning: #f59e0b; --warning-light: #fbbf24;
+            --danger: #ef4444; --danger-light: #f87171;
+            --dark: #0f172a; --dark2: #1e293b; --dark3: #334155; --dark4: #475569;
+            --text: #f8fafc; --text2: #94a3b8; --text3: #64748b;
+            --gradient: linear-gradient(135deg, var(--primary), var(--secondary));
+            --gradient-warm: linear-gradient(135deg, #f59e0b, #ef4444);
+            --gradient-cool: linear-gradient(135deg, #06b6d4, #3b82f6);
         }
+        
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Prompt', sans-serif; background: var(--dark); color: var(--text); padding-bottom: 70px; }
         
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        .fade-in { animation: fadeIn 0.4s ease-out forwards; }
+        body { 
+            font-family: 'Prompt', sans-serif; 
+            background: var(--dark); 
+            color: var(--text); 
+            padding-bottom: 80px;
+            min-height: 100vh;
+            background-image: 
+                radial-gradient(ellipse at top, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at bottom right, rgba(139, 92, 246, 0.1) 0%, transparent 50%);
+        }
         
-        .header { background: linear-gradient(135deg, var(--primary), var(--secondary)); padding: 16px; text-align: center; }
-        .nav-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; padding: 12px; }
-        .nav-card { background: var(--dark2); padding: 12px; text-align: center; border-radius: 12px; cursor: pointer; transition: 0.2s; }
-        .nav-card.active { border: 1px solid var(--primary); background: var(--dark3); }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideIn { from { opacity: 0; transform: translateX(-20px); } to { opacity: 1; transform: translateX(0); } }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+        @keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        @keyframes scaleIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
         
-        .content { padding: 16px; }
+        .fade-in { animation: fadeIn 0.5s ease-out forwards; }
+        .slide-in { animation: slideIn 0.4s ease-out forwards; }
+        .scale-in { animation: scaleIn 0.3s ease-out forwards; }
+        .stagger-1 { animation-delay: 0.1s; opacity: 0; }
+        .stagger-2 { animation-delay: 0.2s; opacity: 0; }
+        .stagger-3 { animation-delay: 0.3s; opacity: 0; }
+        
+        .header { background: var(--gradient); padding: 20px 16px; text-align: center; position: relative; overflow: hidden; }
+        .header::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent); background-size: 200% 100%; animation: shimmer 3s infinite; }
+        .header h1 { font-size: 1.5rem; font-weight: 700; text-shadow: 0 2px 10px rgba(0,0,0,0.3); position: relative; }
+        .header .clock { font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; opacity: 0.9; margin-top: 4px; }
+        
+        .nav-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; padding: 12px 16px; background: rgba(30, 41, 59, 0.8); backdrop-filter: blur(10px); position: sticky; top: 0; z-index: 100; border-bottom: 1px solid var(--dark3); }
+        .nav-card { background: var(--dark3); padding: 10px 4px; text-align: center; border-radius: 12px; cursor: pointer; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); border: 2px solid transparent; font-size: 0.75rem; }
+        .nav-card .icon { font-size: 1.4rem; display: block; margin-bottom: 2px; }
+        .nav-card:hover { transform: translateY(-2px); background: var(--dark4); }
+        .nav-card.active { border-color: var(--primary); background: linear-gradient(135deg, rgba(99, 102, 241, 0.3), rgba(139, 92, 246, 0.3)); box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3); }
+        
+        .content { padding: 16px; max-width: 600px; margin: 0 auto; }
         .page { display: none; }
         .page.active { display: block; }
         
-        .card { background: var(--dark2); border-radius: 12px; padding: 16px; margin-bottom: 12px; border-left: 4px solid var(--primary); }
-        .section-title { font-weight: 600; margin-bottom: 10px; }
+        .card { background: var(--dark2); border-radius: 16px; padding: 16px; margin-bottom: 12px; border: 1px solid var(--dark3); transition: all 0.3s ease; }
+        .card:hover { border-color: var(--primary); box-shadow: 0 4px 20px rgba(99, 102, 241, 0.15); }
+        .card-header { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; font-weight: 600; font-size: 1rem; }
+        .section-title { font-weight: 600; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
         
-        .input-box { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
-        input, select, textarea { background: var(--dark3); border: none; padding: 10px; color: white; border-radius: 8px; }
-        button { background: var(--primary); color: white; border: none; padding: 10px; border-radius: 8px; cursor: pointer; font-family: 'Prompt'; }
-        button:hover { background: var(--secondary); }
+        .weather-card { background: var(--gradient-cool); border: none; }
+        .weather-card .temp { font-size: 3rem; font-weight: 700; line-height: 1; }
+        .weather-card .condition { font-size: 1.1rem; margin: 8px 0; }
+        .weather-card .details { display: flex; gap: 16px; font-size: 0.85rem; opacity: 0.9; }
+        .weather-card .detail-item { display: flex; align-items: center; gap: 4px; }
         
-        .item-row { display: flex; justify-content: space-between; background: var(--dark3); padding: 12px; border-radius: 8px; margin-bottom: 8px; }
-        .delete-btn { color: var(--danger); cursor: pointer; }
+        .news-item { padding: 12px; background: var(--dark3); border-radius: 10px; margin-bottom: 10px; transition: all 0.2s ease; border-left: 3px solid var(--primary); }
+        .news-item:last-child { margin-bottom: 0; }
+        .news-item:hover { transform: translateX(4px); background: var(--dark4); }
+        .news-item .source { font-size: 0.7rem; color: var(--text3); text-transform: uppercase; letter-spacing: 0.5px; }
+        .news-item .title { font-weight: 500; margin: 4px 0; line-height: 1.4; }
+        .news-item .time { font-size: 0.75rem; color: var(--text2); }
         
-        .loading { opacity: 0.5; pointer-events: none; }
-        .spinner { display: inline-block; width: 20px; height: 20px; border: 3px solid rgba(255,255,255,.3); border-radius: 50%; border-top-color: white; animation: spin 1s ease-in-out infinite; }
-        @keyframes spin { to { transform: rotate(360deg); } }
+        .input-box { display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px; }
+        input, select, textarea { background: var(--dark3); border: 2px solid transparent; padding: 12px 14px; color: var(--text); border-radius: 10px; font-family: 'Prompt', sans-serif; transition: all 0.2s ease; }
+        input:focus, select:focus, textarea:focus { outline: none; border-color: var(--primary); background: var(--dark4); }
+        input::placeholder, textarea::placeholder { color: var(--text3); }
+        textarea { min-height: 80px; resize: vertical; }
+        
+        button { background: var(--primary); color: white; border: none; padding: 12px 20px; border-radius: 10px; cursor: pointer; font-family: 'Prompt'; font-weight: 600; transition: all 0.3s ease; display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
+        button:hover { background: var(--primary-hover); transform: translateY(-2px); box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4); }
+        button:active { transform: translateY(0); }
+        button.secondary { background: var(--dark3); }
+        button.secondary:hover { background: var(--dark4); }
+        button.danger { background: var(--danger); }
+        button.danger:hover { background: #dc2626; box-shadow: 0 4px 15px rgba(239, 68, 68, 0.4); }
+        button.success { background: var(--success); }
+        button.success:hover { background: #059669; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4); }
+        
+        .item-row { display: flex; justify-content: space-between; align-items: center; background: var(--dark3); padding: 14px; border-radius: 10px; margin-bottom: 10px; transition: all 0.2s ease; border: 1px solid transparent; }
+        .item-row:hover { border-color: var(--dark4); background: var(--dark4); }
+        .item-content { flex: 1; min-width: 0; }
+        .item-title { font-weight: 500; margin-bottom: 2px; }
+        .item-desc { font-size: 0.85rem; color: var(--text2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .delete-btn { color: var(--danger); cursor: pointer; padding: 8px; border-radius: 8px; transition: all 0.2s ease; font-size: 1.2rem; }
+        .delete-btn:hover { background: rgba(239, 68, 68, 0.2); transform: scale(1.1); }
+        
+        .alert-item { border-left: 4px solid var(--warning); }
+        .alert-item.critical { border-left-color: var(--danger); background: rgba(239, 68, 68, 0.1); }
+        .alert-item.info { border-left-color: var(--primary); }
+        .alert-item.success { border-left-color: var(--success); }
+        .alert-badge { display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 0.7rem; font-weight: 600; text-transform: uppercase; margin-left: 8px; }
+        .alert-badge.warning { background: var(--warning); color: var(--dark); }
+        .alert-badge.critical { background: var(--danger); color: white; }
+        .alert-badge.info { background: var(--primary); color: white; }
+        .alert-badge.success { background: var(--success); color: white; }
+        
+        .status-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+        .status-item { background: var(--dark3); padding: 14px; border-radius: 10px; text-align: center; }
+        .status-item .icon { font-size: 1.5rem; margin-bottom: 6px; }
+        .status-item .label { font-size: 0.75rem; color: var(--text2); margin-bottom: 4px; }
+        .status-item .value { font-weight: 600; font-size: 0.9rem; }
+        .status-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 6px; animation: pulse 2s infinite; }
+        .status-dot.online { background: var(--success); }
+        .status-dot.offline { background: var(--danger); }
+        .status-dot.pending { background: var(--warning); }
+        
+        .loading { opacity: 0.6; pointer-events: none; }
+        .skeleton { background: linear-gradient(90deg, var(--dark3) 25%, var(--dark4) 50%, var(--dark3) 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; border-radius: 8px; height: 20px; margin: 8px 0; }
+        .skeleton.title { width: 60%; height: 24px; }
+        .skeleton.text { width: 100%; }
+        .skeleton.text-50 { width: 50%; }
+        .spinner { display: inline-block; width: 16px; height: 16px; border: 2px solid rgba(255,255,255,.3); border-radius: 50%; border-top-color: white; animation: spin 0.8s linear infinite; }
+        
+        .empty-state { text-align: center; padding: 30px; color: var(--text2); }
+        .empty-state .icon { font-size: 3rem; margin-bottom: 10px; opacity: 0.5; }
+        
+        .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.7); display: none; align-items: center; justify-content: center; z-index: 200; backdrop-filter: blur(4px); }
+        .modal-overlay.active { display: flex; }
+        .modal { background: var(--dark2); border-radius: 20px; padding: 24px; width: 90%; max-width: 400px; border: 1px solid var(--dark3); animation: scaleIn 0.3s ease; }
+        .modal h3 { margin-bottom: 16px; }
+        .modal-actions { display: flex; gap: 10px; margin-top: 16px; }
+        .modal-actions button { flex: 1; }
+        
+        @media (max-width: 480px) {
+            .nav-grid { grid-template-columns: repeat(5, 1fr); gap: 4px; padding: 10px 8px; }
+            .nav-card { padding: 8px 2px; font-size: 0.65rem; }
+            .nav-card .icon { font-size: 1.2rem; }
+            .content { padding: 12px; }
+            .status-grid { grid-template-columns: 1fr; }
+        }
     </style>
 </head>
 <body>
-    <div class="header"><h1>🎯 Mission Control</h1></div>
+    <div class="header">
+        <h1>🎯 Mission Control</h1>
+        <div class="clock" id="clock">--:--</div>
+    </div>
     
     <div class="nav-grid">
-        <div class="nav-card active" onclick="goPage('home')">🏠<br>หลัก</div>
-        <div class="nav-card" onclick="goPage('tasks')">📋<br>งาน</div>
-        <div class="nav-card" onclick="goPage('notes')">📝<br>โน้ต</div>
-        <div class="nav-card" onclick="goPage('system')">💻<br>ระบบ</div>
+        <div class="nav-card active" data-page="home"><span class="icon">🏠</span>หลัก</div>
+        <div class="nav-card" data-page="tasks"><span class="icon">📋</span>งาน</div>
+        <div class="nav-card" data-page="notes"><span class="icon">📝</span>โน้ต</div>
+        <div class="nav-card" data-page="alerts"><span class="icon">🔔</span>แจ้งเตือน</div>
+        <div class="nav-card" data-page="system"><span class="icon">💻</span>ระบบ</div>
     </div>
     
     <div class="content">
         <!-- HOME -->
         <div class="page active fade-in" id="page-home">
-            <div class="section-title">🌤️ สภาพอากาศ (Weather)</div>
-            <div class="card" id="weather-card">กำลังโหลด...</div>
-            
-            <div class="section-title">📰 ข่าวล่าสุด (News)</div>
-            <div class="card" id="news-card">กำลังโหลด...</div>
+            <div class="card weather-card fade-in stagger-1"><div id="weather-content"><div class="skeleton title"></div><div class="skeleton text-50"></div></div></div>
+            <div class="card fade-in stagger-2">
+                <div class="card-header">📰 ข่าวล่าสุด</div>
+                <div id="news-content"><div class="skeleton text"></div><div class="skeleton text"></div><div class="skeleton text-50"></div></div>
+            </div>
+            <div class="status-grid fade-in stagger-3">
+                <div class="status-item"><div class="icon">📋</div><div class="label">งาน</div><div class="value" id="task-count">-</div></div>
+                <div class="status-item"><div class="icon">📝</div><div class="label">โน้ต</div><div class="value" id="note-count">-</div></div>
+                <div class="status-item"><div class="icon">🔔</div><div class="label">แจ้งเตือน</div><div class="value" id="alert-count">-</div></div>
+                <div class="status-item"><div class="icon">⏰</div><div class="label">อัปเดต</div><div class="value" id="last-update">-</div></div>
+            </div>
         </div>
         
         <!-- TASKS -->
         <div class="page fade-in" id="page-tasks">
             <div class="input-box">
-                <input type="text" id="task-title" placeholder="ชื่องาน...">
-                <button onclick="addTask()">+ เพิ่มงาน</button>
+                <input type="text" id="task-title" placeholder="➕ เพิ่มงานใหม่..." onkeypress="if(event.key==='Enter')addTask()">
+                <button onclick="addTask()">เพิ่มงาน</button>
             </div>
-            <div id="task-list"></div>
+            <div id="task-list"><div class="empty-state"><div class="icon">📋</div><div>ไม่มีงาน</div></div></div>
         </div>
         
         <!-- NOTES -->
         <div class="page fade-in" id="page-notes">
             <div class="input-box">
-                <input type="text" id="note-title" placeholder="หัวข้อ...">
-                <textarea id="note-body" placeholder="เนื้อหา..."></textarea>
-                <button onclick="addNote()">+ เพิ่มโน้ต</button>
+                <input type="text" id="note-title" placeholder="📌 หัวข้อ...">
+                <textarea id="note-body" placeholder="📝 เนื้อหา..."></textarea>
+                <button onclick="addNote()">บันทึกโน้ต</button>
             </div>
-            <div id="note-list"></div>
+            <div id="note-list"><div class="empty-state"><div class="icon">📝</div><div>ไม่มีโน้ต</div></div></div>
+        </div>
+        
+        <!-- ALERTS -->
+        <div class="page fade-in" id="page-alerts">
+            <div class="input-box">
+                <input type="text" id="alert-title" placeholder="⚠️ หัวข้อแจ้งเตือน...">
+                <select id="alert-type">
+                    <option value="info">ℹ️ ข้อมูล</option>
+                    <option value="warning">⚠️ คำเตือน</option>
+                    <option value="critical">🔴 วิกฤต</option>
+                    <option value="success">✅ สำเร็จ</option>
+                </select>
+                <button onclick="addAlert()">เพิ่มแจ้งเตือน</button>
+            </div>
+            <div id="alert-list"><div class="empty-state"><div class="icon">🔔</div><div>ไม่มีแจ้งเตือน</div></div></div>
         </div>
         
         <!-- SYSTEM -->
         <div class="page fade-in" id="page-system">
-            <div class="section-title">💻 สถานะระบบ</div>
-            <div class="card" id="sys-status">กำลังโหลดข้อมูลจาก Gateway...</div>
+            <div class="card">
+                <div class="card-header">💻 สถานะระบบ</div>
+                <div class="status-grid" id="sys-status">
+                    <div class="status-item"><div class="icon">🌐</div><div class="label">Gateway</div><div class="value"><span class="status-dot online"></span>Online</div></div>
+                    <div class="status-item"><div class="icon">🤖</div><div class="label">OpenClaw</div><div class="value">v2026.3</div></div>
+                    <div class="status-item"><div class="icon">🧠</div><div class="label">AI Model</div><div class="value">MiniMax</div></div>
+                    <div class="status-item"><div class="icon">☁️</div><div class="label">Cloud Sync</div><div class="value"><span class="status-dot pending"></span>Syncing</div></div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header">📊 ข้อมูลเมื่อต้องการ</div>
+                <div class="status-item" style="text-align: left; margin-bottom: 10px;">
+                    <div style="display:flex;justify-content:space-between;align-items:center;"><span>Session Time</span><span id="session-time" style="font-family: 'JetBrains Mono';">--:--:--</span></div>
+                </div>
+                <div class="status-item" style="text-align: left;">
+                    <div style="display:flex;justify-content:space-between;align-items:center;"><span>Uptime</span><span id="uptime">-</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal-overlay" id="edit-modal">
+        <div class="modal">
+            <h3>✏️ แก้ไข</h3>
+            <input type="hidden" id="edit-id">
+            <input type="hidden" id="edit-type">
+            <div class="input-box">
+                <input type="text" id="edit-title" placeholder="หัวข้อ...">
+                <textarea id="edit-body" placeholder="เนื้อหา..."></textarea>
+            </div>
+            <div class="modal-actions">
+                <button class="secondary" onclick="closeModal()">ยกเลิก</button>
+                <button class="success" onclick="saveEdit()">บันทึก</button>
+            </div>
         </div>
     </div>
 
     <script>
-        function goPage(page) {
-            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-            document.querySelectorAll('.nav-card').forEach(c => c.classList.remove('active'));
-            document.getElementById('page-'+page).classList.add('active');
-            event.currentTarget.classList.add('active');
-        }
+        function escapeHtml(text) { const div = document.createElement('div'); div.textContent = text; return div.innerHTML; }
+        function formatTime() { return new Date().toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit' }); }
+        function formatFullTime() { return new Date().toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit', second: '2-digit' }); }
 
-        // CRUD Logic
+        // Clock
+        function updateClock() {
+            document.getElementById('clock').textContent = formatTime();
+            document.getElementById('session-time').textContent = formatFullTime();
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+        
+        // Uptime
+        const startTime = Date.now();
+        setInterval(() => {
+            const diff = Math.floor((Date.now() - startTime) / 1000);
+            const h = Math.floor(diff / 3600), m = Math.floor((diff % 3600) / 60), s = diff % 60;
+            document.getElementById('uptime').textContent = `${h}:${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
+        }, 1000);
+
+        // Navigation
+        document.querySelectorAll('.nav-card').forEach(card => {
+            card.addEventListener('click', () => {
+                const page = card.dataset.page;
+                document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+                document.querySelectorAll('.nav-card').forEach(c => c.classList.remove('active'));
+                document.getElementById('page-'+page).classList.add('active');
+                card.classList.add('active');
+            });
+        });
+
+        // Database
         const DB = {
-            get: (k) => JSON.parse(localStorage.getItem(k)) || [],
-            set: (k, v) => localStorage.setItem(k, JSON.stringify(v)),
-            add: (k, item) => { const d = DB.get(k); d.push({id: Date.now(), ...item}); DB.set(k, d); },
-            del: (k, id) => DB.set(k, DB.get(k).filter(x => x.id !== id))
+            get: (k) => JSON.parse(localStorage.getItem('mc_'+k)) || [],
+            set: (k, v) => localStorage.setItem('mc_'+k, JSON.stringify(v)),
+            add: (k, item) => { const d = DB.get(k); d.push({id: Date.now(), ...item}); DB.set(k, d); updateCounts(); },
+            del: (k, id) => { DB.set(k, DB.get(k).filter(x => x.id !== id)); updateCounts(); },
+            update: (k, id, data) => { const d = DB.get(k); const idx = d.findIndex(x => x.id === id); if(idx >= 0) { d[idx] = {...d[idx], ...data}; DB.set(k, d); } updateCounts(); }
         };
 
+        function updateCounts() {
+            document.getElementById('task-count').textContent = DB.get('tasks').length;
+            document.getElementById('note-count').textContent = DB.get('notes').length;
+            document.getElementById('alert-count').textContent = DB.get('alerts').length;
+            document.getElementById('last-update').textContent = formatTime();
+        }
+
+        // Tasks
         function renderTasks() {
-            document.getElementById('task-list').innerHTML = DB.get('tasks').map(t => 
-                `<div class="item-row"><div>${t.title}</div><div class="delete-btn" onclick="DB.del('tasks', ${t.id}); renderTasks()">🗑️</div></div>`
-            ).join('') || 'ไม่มีงาน';
+            const tasks = DB.get('tasks');
+            const el = document.getElementById('task-list');
+            if(tasks.length === 0) { el.innerHTML = '<div class="empty-state"><div class="icon">📋</div><div>ไม่มีงาน</div></div>'; return; }
+            el.innerHTML = tasks.map(t => `<div class="item-row slide-in"><div class="item-content"><div class="item-title">${escapeHtml(t.title)}</div></div><div style="display:flex;gap:4px;"><span class="delete-btn" onclick="openEdit('tasks', ${t.id}, '${escapeHtml(t.title)}', '')">✏️</span><span class="delete-btn" onclick="deleteTask(${t.id})">🗑️</span></div></div>`).join('');
         }
-        function addTask() {
-            const val = document.getElementById('task-title').value;
-            if(val) { DB.add('tasks', {title: val}); document.getElementById('task-title').value = ''; renderTasks(); }
-        }
+        function addTask() { const val = document.getElementById('task-title').value.trim(); if(val) { DB.add('tasks', {title: val}); document.getElementById('task-title').value = ''; renderTasks(); } }
+        function deleteTask(id) { DB.del('tasks', id); renderTasks(); }
 
+        // Notes
         function renderNotes() {
-            document.getElementById('note-list').innerHTML = DB.get('notes').map(n => 
-                `<div class="item-row" style="flex-direction:column;gap:5px;">
-                    <div style="display:flex;justify-content:space-between"><b>${n.title}</b> <span class="delete-btn" onclick="DB.del('notes', ${n.id}); renderNotes()">🗑️</span></div>
-                    <div style="color:var(--text2);font-size:0.9em">${n.body}</div>
-                </div>`
-            ).join('') || 'ไม่มีโน้ต';
+            const notes = DB.get('notes');
+            const el = document.getElementById('note-list');
+            if(notes.length === 0) { el.innerHTML = '<div class="empty-state"><div class="icon">📝</div><div>ไม่มีโน้ต</div></div>'; return; }
+            el.innerHTML = notes.map(n => `<div class="item-row slide-in"><div class="item-content"><div class="item-title">${escapeHtml(n.title)}</div><div class="item-desc">${escapeHtml(n.body || '-')}</div></div><div style="display:flex;gap:4px;"><span class="delete-btn" onclick="openEdit('notes', ${n.id}, '${escapeHtml(n.title)}', '${escapeHtml(n.body || '')}')">✏️</span><span class="delete-btn" onclick="deleteNote(${n.id})">🗑️</span></div></div>`).join('');
         }
-        function addNote() {
-            const t = document.getElementById('note-title').value;
-            const b = document.getElementById('note-body').value;
-            if(t) { DB.add('notes', {title: t, body: b}); document.getElementById('note-title').value = ''; document.getElementById('note-body').value = ''; renderNotes(); }
-        }
+        function addNote() { const t = document.getElementById('note-title').value.trim(); const b = document.getElementById('note-body').value.trim(); if(t) { DB.add('notes', {title: t, body: b}); document.getElementById('note-title').value = ''; document.getElementById('note-body').value = ''; renderNotes(); } }
+        function deleteNote(id) { DB.del('notes', id); renderNotes(); }
 
-        // Fetchers
+        // Alerts
+        function renderAlerts() {
+            const alerts = DB.get('alerts');
+            const el = document.getElementById('alert-list');
+            if(alerts.length === 0) { el.innerHTML = '<div class="empty-state"><div class="icon">🔔</div><div>ไม่มีแจ้งเตือน</div></div>'; return; }
+            const icons = { info: 'ℹ️', warning: '⚠️', critical: '🔴', success: '✅' };
+            el.innerHTML = alerts.map(a => `<div class="item-row alert-item ${a.type} slide-in"><div class="item-content"><div class="item-title">${icons[a.type] || '🔔'} ${escapeHtml(a.title)}<span class="alert-badge ${a.type}">${a.type}</span></div><div class="item-desc">${new Date(a.id).toLocaleString('th-TH')}</div></div><span class="delete-btn" onclick="deleteAlert(${a.id})">🗑️</span></div>`).join('');
+        }
+        function addAlert() { const title = document.getElementById('alert-title').value.trim(); const type = document.getElementById('alert-type').value; if(title) { DB.add('alerts', {title, type}); document.getElementById('alert-title').value = ''; renderAlerts(); } }
+        function deleteAlert(id) { DB.del('alerts', id); renderAlerts(); }
+
+        // Modal
+        function openEdit(type, id, title, body) { document.getElementById('edit-type').value = type; document.getElementById('edit-id').value = id; document.getElementById('edit-title').value = title; document.getElementById('edit-body').value = body; document.getElementById('edit-modal').classList.add('active'); }
+        function closeModal() { document.getElementById('edit-modal').classList.remove('active'); }
+        function saveEdit() { const type = document.getElementById('edit-type').value; const id = parseInt(document.getElementById('edit-id').value); const title = document.getElementById('edit-title').value.trim(); const body = document.getElementById('edit-body').value.trim(); if(title) { DB.update(type, id, {title, body}); closeModal(); if(type === 'tasks') renderTasks(); if(type === 'notes') renderNotes(); } }
+
+        // Weather (wttr.in)
         async function fetchWeather() {
             try {
                 const res = await fetch('https://wttr.in/Bangkok?format=j1');
                 const data = await res.json();
-                const current = data.current_condition[0];
-                document.getElementById('weather-card').innerHTML = `<h3>🇹🇭 กรุงเทพ: ${current.temp_C}°C</h3><p>${current.weatherDesc[0].value}</p><p style="font-size:0.8em;color:var(--text2)">Feels like: ${current.FeelsLikeC}°C | Humidity: ${current.humidity}%</p>`;
-            } catch(e) { document.getElementById('weather-card').innerHTML = '❌ โหลดสภาพอากาศไม่สำเร็จ'; }
+                const c = data.current_condition[0];
+                const weatherIcons = { 'Sunny': '☀️', 'Clear': '🌙', 'Partly cloudy': '⛅', 'Cloudy': '☁️', 'Overcast': '🌥️', 'Mist': '🌫️', 'Rain': '🌧️', 'Light rain': '🌦️', 'Thunderstorm': '⛈️' };
+                const icon = weatherIcons[c.weatherDesc[0].value] || '🌤️';
+                document.getElementById('weather-content').innerHTML = `<div class="temp">${c.temp_C}°C</div><div class="condition">${icon} ${c.weatherDesc[0].value}</div><div class="details"><div class="detail-item">💧 ${c.humidity}%</div><div class="detail-item">🌬️ ${c.windspeedKmph} km/h</div><div class="detail-item">👁️ ${c.visibility} km</div></div>`;
+            } catch(e) { document.getElementById('weather-content').innerHTML = '<div>❌ โหลดสภาพอากาศไม่สำเร็จ</div>'; }
         }
 
+        // News (RSS via rss2json)
         async function fetchNews() {
-            // Mocking news fetch as Brave Search needs API key / backend proxy
-            document.getElementById('news-card').innerHTML = `
-                <div style="margin-bottom:10px">🔴 <b>ตลาดคริปโตวันนี้</b> - Bitcoin ทะลุ $80,000 รับกระแสการลงทุน</div>
-                <div style="margin-bottom:10px">🔵 <b>Tech Update</b> - AI รุ่นใหม่ประมวลผลเร็วขึ้น 2 เท่า</div>
-                <div>🟢 <b>เศรษฐกิจ</b> - ราคาทองคำผันผวนเล็กน้อย</div>
-            `;
-        }
-
-        async function fetchSystemStatus() {
-            document.getElementById('sys-status').innerHTML = `
-                <div class="item-row"><span>🌐 Gateway API</span> <span style="color:var(--success)">Online</span></div>
-                <div class="item-row"><span>🤖 OpenClaw Core</span> <span style="color:var(--success)">v2026.3.2</span></div>
-                <div class="item-row"><span>☁️ Sync Service</span> <span style="color:var(--warning)">Pending</span></div>
-            `;
+            try {
+                const res = await fetch('https://api.rss2json.com/v1/api.json?rss_url=https://www.prachachat.net/feed');
+                const data = await res.json();
+                if(data.status === 'ok' && data.items && data.items.length > 0) {
+                    const news = data.items.slice(0, 3).map(item => `<div class="news-item"><div class="source">${item.author || 'prachachat'}</div><div class="title">${item.title}</div><div class="time">${new Date(item.pubDate).toLocaleDateString('th-TH')}</div></div>`).join('');
+                    document.getElementById('news-content').innerHTML = news;
+                } else { throw new Error('No data'); }
+            } catch(e) { document.getElementById('news-content').innerHTML = '<div class="news-item"><div class="title">📡 กำลังเชื่อมต่อข่าวสาร...</div></div>'; }
         }
 
         // Init
-        renderTasks(); renderNotes();
-        fetchWeather(); fetchNews(); fetchSystemStatus();
+        renderTasks(); renderNotes(); renderAlerts(); updateCounts();
+        fetchWeather(); fetchNews();
     </script>
 </body>
 </html>
