@@ -20,11 +20,9 @@
         .header-icon { width: 44px; height: 44px; background: rgba(255,255,255,0.2); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px; }
         .header h1 { font-size: 1.2rem; font-weight: 700; }
         .header-btn { width: 38px; height: 38px; background: rgba(255,255,255,0.15); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 16px; cursor: pointer; }
-        .header-btn:active { transform: scale(0.9); }
         .scroll { flex: 1; overflow-y: auto; overflow-x: hidden; -webkit-overflow-scrolling: touch; padding: 16px; padding-bottom: 90px; }
         .nav-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 16px; }
         .nav-card { background: var(--dark2); border-radius: 14px; padding: 12px 6px; text-align: center; cursor: pointer; border: 2px solid transparent; }
-        .nav-card:active { transform: scale(0.95); }
         .nav-card.active { border-color: var(--primary); background: var(--dark3); }
         .nav-card .icon { font-size: 22px; margin-bottom: 4px; }
         .nav-card .label { font-size: 0.62rem; font-weight: 600; }
@@ -40,9 +38,7 @@
         .card .meta { font-size: 0.75rem; color: var(--text2); margin-top: 8px; }
         .input-box { background: var(--dark2); border-radius: 14px; padding: 14px; margin-bottom: 14px; border: 1px solid var(--dark3); }
         .input-box input, .input-box textarea, .input-box select { width: 100%; background: var(--dark3); border: none; border-radius: 10px; padding: 12px; color: var(--text); font-size: 0.95rem; font-family: inherit; margin-bottom: 8px; }
-        .input-box textarea { height: 70px; }
         .btn { background: linear-gradient(135deg, var(--primary), var(--secondary)); border: none; color: white; padding: 12px 20px; border-radius: 10px; font-weight: 600; cursor: pointer; width: 100%; }
-        .btn:active { transform: scale(0.98); }
         .btn-row { display: flex; gap: 8px; }
         .btn-small { padding: 10px 12px; font-size: 0.85rem; }
         .btn.high { background: linear-gradient(135deg, var(--danger), #dc2626); }
@@ -50,7 +46,6 @@
         .btn.low { background: linear-gradient(135deg, var(--success), #059669); }
         .quick-btns { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px; }
         .quick-btn { background: var(--dark3); padding: 6px 12px; border-radius: 16px; font-size: 0.72rem; cursor: pointer; }
-        .quick-btn:active { background: var(--primary); }
         .task-item { background: var(--dark2); border-radius: 12px; padding: 12px; margin-bottom: 8px; display: flex; align-items: center; gap: 10px; }
         .task-check { width: 24px; height: 24px; border: 2px solid var(--dark3); border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 12px; cursor: pointer; }
         .task-check.done { background: var(--success); border-color: var(--success); }
@@ -89,7 +84,7 @@
 <body>
     <div class="app">
         <div class="page active" id="page-home">
-            <div class="header"><div class="header-left"><div class="header-icon">🎯</div><h1>ศูนย์ควบคุม</h1></div><div class="header-right"><div class="header-btn" onclick="refreshAll()">🔄</div></div></div>
+            <div class="header"><div class="header-icon">🎯</div><h1>ศูนย์ควบคุม</h1><div class="header-btn" onclick="refreshAll()">🔄</div></div>
             <div class="scroll">
                 <div class="nav-grid">
                     <div class="nav-card active" onclick="goPage('home')"><span class="icon">🏠</span><span class="label">หน้าหลัก</span></div>
@@ -101,58 +96,57 @@
                     <div class="nav-card" onclick="goPage('calendar')"><span class="icon">📅</span><span class="label">ปฏิทิน</span></div>
                     <div class="nav-card" onclick="goPage('system')"><span class="icon">💻</span><span class="label">ระบบ</span></div>
                 </div>
-                <div class="section-title">💰 เทรด</div>
-                <div class="card gold" onclick="goPage('trading')"><h3>🟡 ทองคำ</h3><div class="price" id="home-gold">$5,171.50</div><div class="change up">▲ +$23.50 (+0.46%)</div></div>
-                <div class="card btc" onclick="goPage('trading')"><h3>🟠 บิตคอยน์</h3><div class="price" id="home-btc">$84,230</div><div class="change up">▲ +$1,230 (+1.48%)</div></div>
-                <div class="section-title">📋 งาน <span id="task-count" style="font-size:0.75rem;font-weight:400;color:var(--text2)"></span></div>
+                <div class="section-title">💰 ราคาตลาด</div>
+                <div class="card gold" onclick="goPage('trading')"><h3>🟡 ทองคำ</h3><div class="price">$5,171.50</div><div class="change up">▲ +$23.50 (+0.46%)</div></div>
+                <div class="card btc" onclick="goPage('trading')"><h3>🟠 บิตคอยน์</h3><div class="price">$84,230</div><div class="change up">▲ +$1,230 (+1.48%)</div></div>
+                <div class="section-title">📋 งานที่ต้องทำ <span id="task-count"></span></div>
                 <div id="home-tasks"></div>
             </div>
         </div>
         
         <div class="page" id="page-jarvis">
-            <div class="header"><div class="header-left"><div class="header-btn" onclick="goPage('home')">←</div><h1>🤖 จาร์วิส</h1></div></div>
+            <div class="header"><div class="header-btn" onclick="goPage('home')">←</div><h1>🤖 จาร์วิส</h1></div>
             <div class="scroll">
                 <div class="input-box">
                     <input type="text" id="jarvis-input" placeholder="พิมพ์คำสั่ง..." onkeypress="if(event.key==='Enter')sendCommand()">
                     <button class="btn" onclick="sendCommand()">📤 ส่งคำสั่ง</button>
                     <div class="quick-btns">
                         <div class="quick-btn" onclick="quickCmd('ราคาทอง')">📊 ราคาทอง</div>
-                        <div class="quick-btn" onclick="quickCmd('ราคา บิตคอยน์')">📈 บิตคอยน์</div>
+                        <div class="quick-btn" onclick="quickCmd('ราคา BTC')">📈 BTC</div>
                         <div class="quick-btn" onclick="quickCmd('สภาพอากาศ')">🌤️ อากาศ</div>
                         <div class="quick-btn" onclick="quickCmd('ข่าว')">📰 ข่าว</div>
-                        <div class="quick-btn" onclick="quickCmd('สร้าง Task')">📋 Task</div>
                     </div>
                 </div>
                 <div class="section-title">💬 การสนทนา</div>
                 <div id="chat-history">
-                    <div class="card" style="border-left-color:var(--success)"><h3>🤖 จาร์วิส</h3><div style="color:var(--text2)">สวีสังคมค่ะพี่เบส! 💖</div></div>
+                    <div class="card" style="border-left-color:var(--success)"><h3>🤖 จาร์วิส</h3><div style="color:var(--text2)">สวีสังคมค่ะพี่เบส! 💖<br>มีอะไรให้ช่วยไหมคะ?</div></div>
                 </div>
             </div>
         </div>
         
         <div class="page" id="page-trading">
-            <div class="header"><div class="header-left"><div class="header-btn" onclick="goPage('home')">←</div><h1>💰 เทรด</h1></div><div class="header-right"><div class="header-btn" onclick="fetchPrices()">🔄</div></div></div>
+            <div class="header"><div class="header-btn" onclick="goPage('home')">←</div><h1>💰 ราคาตลาด</h1><div class="header-btn" onclick="fetchPrices()">🔄</div></div>
             <div class="scroll">
-                <div class="card gold"><h3>🟡 ทองคำ (XAUUSD)</h3><div class="price" id="gold-price">$5,171.50</div><div class="change up">▲ +$23.50 (+0.46%)</div><div class="meta">High: $5,189 | Low: $5,148</div></div>
-                <div class="card btc"><h3>🟠 บิตคอยน์/USD</h3><div class="price" id="btc-price">$84,230</div><div class="change up">▲ +$1,230 (+1.48%)</div><div class="meta">High: $85,100 | Low: $82,500</div></div>
-                <div class="card"><h3>🇺🇸 USD/THB</h3><div class="price">฿35.42</div><div class="change down">▼ -$0.08 (-0.23%)</div></div>
-                <div class="card"><h3>🌤️ สภาพอากาศ</h3><div class="price">32°C</div><div>partly cloudy</div></div>
+                <div class="card gold"><h3>🟡 ทองคำ (XAUUSD)</h3><div class="price" id="gold-price">$5,171.50</div><div class="change up">▲ +$23.50 (+0.46%)</div><div class="meta">สูงสุด: $5,189 | ต่ำสุด: $5,148</div></div>
+                <div class="card btc"><h3>🟠 บิตคอยน์ (BTC/USD)</h3><div class="price" id="btc-price">$84,230</div><div class="change up">▲ +$1,230 (+1.48%)</div><div class="meta">สูงสุด: $85,100 | ต่ำสุด: $82,500</div></div>
+                <div class="card"><h3>🇺🇸 ดอลลาร์/บาท</h3><div class="price">฿35.42</div><div class="change down">▼ -$0.08 (-0.23%)</div></div>
+                <div class="card"><h3>🌤️ สภาพอากาศ (กรุงเทพฯ)</h3><div class="price">32°C</div><div>มีเมฆบางส่วน</div></div>
             </div>
         </div>
         
         <div class="page" id="page-tasks">
-            <div class="header"><div class="header-left"><div class="header-btn" onclick="goPage('home')">←</div><h1>📋 งาน</h1></div><div class="header-right"><div class="header-btn" onclick="showAddTask()">+</div></div></div>
+            <div class="header"><div class="header-btn" onclick="goPage('home')">←</div><h1>📋 งาน</h1><div class="header-btn" onclick="showAddTask()">+</div></div>
             <div class="scroll">
                 <div class="input-box" id="add-task-box" style="display:none">
-                    <input type="text" id="new-task-title" placeholder="ชื่อ Task...">
-                    <div class="btn-row"><button class="btn btn-small high" onclick="addTask('high')">🔴 High</button><button class="btn btn-small med" onclick="addTask('med')">🟡 Med</button><button class="btn btn-small low" onclick="addTask('low')">🟢 Low</button></div>
+                    <input type="text" id="new-task-title" placeholder="ชื่องาน...">
+                    <div class="btn-row"><button class="btn btn-small high" onclick="addTask('high')">🔴 ด่วน</button><button class="btn btn-small med" onclick="addTask('med')">🟡 ปกติ</button><button class="btn btn-small low" onclick="addTask('low')">🟢 ไม่ด่วน</button></div>
                 </div>
                 <div id="task-list"></div>
             </div>
         </div>
         
         <div class="page" id="page-notes">
-            <div class="header"><div class="header-left"><div class="header-btn" onclick="goPage('home')">←</div><h1>📝 โน้ต</h1></div><div class="header-right"><div class="header-btn" onclick="showAddNote()">+</div></div></div>
+            <div class="header"><div class="header-btn" onclick="goPage('home')">←</div><h1>📝 โน้ต</h1><div class="header-btn" onclick="showAddNote()">+</div></div>
             <div class="scroll">
                 <div class="input-box" id="add-note-box" style="display:none">
                     <input type="text" id="new-note-title" placeholder="หัวข้อ...">
@@ -164,10 +158,10 @@
         </div>
         
         <div class="page" id="page-alerts">
-            <div class="header"><div class="header-left"><div class="header-btn" onclick="goPage('home')">←</div><h1>🔔 Price แจ้งเตือน</h1></div><div class="header-right"><div class="header-btn" onclick="showAddAlert()">+</div></div></div>
+            <div class="header"><div class="header-btn" onclick="goPage('home')">←</div><h1>🔔 แจ้งเตือนราคา</h1><div class="header-btn" onclick="showAddAlert()">+</div></div>
             <div class="scroll">
                 <div class="input-box" id="add-alert-box" style="display:none">
-                    <input type="text" id="new-alert-symbol" placeholder="สัญลักษณ์ (XAUUSD, บิตคอยน์)">
+                    <input type="text" id="new-alert-symbol" placeholder="สัญลักษณ์ (XAUUSD, BTC)">
                     <input type="number" id="new-alert-price" placeholder="ราคาเป้าหมาย">
                     <select id="new-alert-type"><option value="above">🔺 สูงกว่า</option><option value="below">🔻 ต่ำกว่า</option></select>
                     <button class="btn" onclick="addAlert()">🔔 เพิ่ม</button>
@@ -177,27 +171,27 @@
         </div>
         
         <div class="page" id="page-calendar">
-            <div class="header"><div class="header-left"><div class="header-btn" onclick="goPage('home')">←</div><h1>📅 ปฏิทิน</h1></div></div>
+            <div class="header"><div class="header-btn" onclick="goPage('home')">←</div><h1>📅 ปฏิทิน</h1></div>
             <div class="scroll">
                 <div class="card"><h3>📅 มีนาคม 2026</h3>
                     <div class="cal-grid" style="margin-top:12px"><div class="cal-day header">อา</div><div class="cal-day header">จ</div><div class="cal-day header">อ</div><div class="cal-day header">พ</div><div class="cal-day header">พฤ</div><div class="cal-day header">ศ</div><div class="cal-day header">ส</div><div class="cal-day">1</div><div class="cal-day">2</div><div class="cal-day">3</div><div class="cal-day">4</div><div class="cal-day today">5</div><div class="cal-day">6</div><div class="cal-day">7</div><div class="cal-day">8</div><div class="cal-day event">9</div><div class="cal-day">10</div></div>
                 </div>
                 <div class="section-title">📅 วันนี้</div>
-                <div class="card"><h3>🌅 Morning Brief</h3><div class="meta">07:00 - เสร็จแล้ว ✅</div></div>
+                <div class="card"><h3>🌅 สรุปตอนเช้า</h3><div class="meta">07:00 - เสร็จสิ้นแล้ว ✅</div></div>
                 <div class="card"><h3>📚 สอนน้องหมิว</h3><div class="meta">12:00 - นัดหมาย 📍 ห้องเรียน</div></div>
             </div>
         </div>
         
         <div class="page" id="page-system">
-            <div class="header"><div class="header-left"><div class="header-btn" onclick="goPage('home')">←</div><h1>💻 ระบบ</h1></div><div class="header-right"><div class="header-btn" onclick="fetchระบบStatus()">🔄</div></div></div>
+            <div class="header"><div class="header-btn" onclick="goPage('home')">←</div><h1>💻 สถานะระบบ</h1><div class="header-btn" onclick="fetchSystemStatus()">🔄</div></div>
             <div class="scroll">
-                <div class="system-item"><div class="system-left"><span class="system-icon">🌐</span><span class="system-name">Gateway</span></div><span class="system-status ok" id="sys-gateway">พร้อม</span></div>
+                <div class="system-item"><div class="system-left"><span class="system-icon">🌐</span><span class="system-name">เกตเวย์</span></div><span class="system-status ok" id="sys-gateway">พร้อม</span></div>
                 <div class="system-item"><div class="system-left"><span class="system-icon">🦞</span><span class="system-name">OpenClaw</span></div><span class="system-status ok">v2026.3.2</span></div>
                 <div class="system-item"><div class="system-left"><span class="system-icon">🤖</span><span class="system-name">Minimax</span></div><span class="system-status ok">พร้อม</span></div>
                 <div class="system-item"><div class="system-left"><span class="system-icon">🔍</span><span class="system-name">Brave Search</span></div><span class="system-status ok">พร้อม</span></div>
                 <div class="system-item"><div class="system-left"><span class="system-icon">📊</span><span class="system-name">FMP API</span></div><span class="system-status ok">พร้อม</span></div>
-                <div class="system-item"><div class="system-left"><span class="system-icon">📅</span><span class="system-name">Google ปฏิทิน</span></div><span class="system-status ok">เชื่อมต่อแล้ว</span></div>
-                <div class="system-item"><div class="system-left"><span class="system-icon">📚</span><span class="system-name">Knowledge App</span></div><span class="system-status ok" style="cursor:pointer" onclick="window.open('https://basssg.github.io/daily-knowledge/','_blank')">เปิด →</span></div>
+                <div class="system-item"><div class="system-left"><span class="system-icon">📅</span><span class="system-name">Google Calendar</span></div><span class="system-status ok">เชื่อมต่อแล้ว</span></div>
+                <div class="system-item"><div class="system-left"><span class="system-icon">📚</span><span class="system-name">แอปความรู้</span></div><span class="system-status ok" style="cursor:pointer" onclick="window.open('https://basssg.github.io/daily-knowledge/','_blank')">เปิด →</span></div>
             </div>
         </div>
         
@@ -211,42 +205,60 @@
     </div>
 
     <script>
-        const TaskManager = { key: 'mc_tasks_v1', get() { return JSON.parse(localStorage.getItem(this.key)) || [{id:1,title:'ทำรายงาน เทรด',priority:'high',due:'Today',done:false},{id:2,title:'ตรวจ Cron Jobs',priority:'med',due:'Tomorrow',done:false}]; }, save(t) { localStorage.setItem(this.key, JSON.stringify(t)); }, add(title,p) { const t=this.get(); t.push({id:Date.now(),title,priority:p,due:new Date().toLocaleDateString('th-TH'),done:false}); this.save(t); }, toggle(id) { const t=this.get().find(x=>x.id===id); if(t) t.done=!t.done; this.save(this.get()); }, delete(id) { this.save(this.get().filter(x=>x.id!==id)); } };
-        const NoteManager = { key: 'mc_notes_v1', get() { return JSON.parse(localStorage.getItem(this.key)) || []; }, save(t) { localStorage.setItem(this.key, JSON.stringify(t)); }, add(title,c) { const t=this.get(); t.unshift({id:Date.now(),title,content:c,date:new Date().toLocaleDateString('th-TH')}); this.save(t); }, delete(id) { this.save(this.get().filter(x=>x.id!==id)); } };
-        const AlertManager = { key: 'mc_alerts_v1', get() { return JSON.parse(localStorage.getItem(this.key)) || []; }, save(t) { localStorage.setItem(this.key, JSON.stringify(t)); }, add(s,p,t) { const a=this.get(); a.push({id:Date.now(),symbol:s.toUpperCase(),price:parseFloat(p),type:t}); this.save(a); }, delete(id) { this.save(this.get().filter(x=>x.id!==id)); } };
+        const TaskManager = { key: 'mc_tasks', get() { return JSON.parse(localStorage.getItem(this.key)) || [{id:1,title:'ทำรายงานเทรด',priority:'high',due:'วันนี้',done:false},{id:2,title:'ตรวจ Cron Jobs',priority:'med',due:'พรุ่งนี้',done:false}]; }, save(t) { localStorage.setItem(this.key, JSON.stringify(t)); }, add(title,p) { const t=this.get(); t.push({id:Date.now(),title,priority:p,due:new Date().toLocaleDateString('th-TH'),done:false}); this.save(t); }, toggle(id) { const t=this.get().find(x=>x.id===id); if(t) t.done=!t.done; this.save(this.get()); }, delete(id) { this.save(this.get().filter(x=>x.id!==id)); } };
+        const NoteManager = { key: 'mc_notes', get() { return JSON.parse(localStorage.getItem(this.key)) || []; }, save(t) { localStorage.setItem(this.key, JSON.stringify(t)); }, add(title,c) { const t=this.get(); t.unshift({id:Date.now(),title,content:c,date:new Date().toLocaleDateString('th-TH')}); this.save(t); }, delete(id) { this.save(this.get().filter(x=>x.id!==id)); } };
+        const AlertManager = { key: 'mc_alerts', get() { return JSON.parse(localStorage.getItem(this.key)) || []; }, save(t) { localStorage.setItem(this.key, JSON.stringify(t)); }, add(s,p,t) { const a=this.get(); a.push({id:Date.now(),symbol:s.toUpperCase(),price:parseFloat(p),type:t}); this.save(a); }, delete(id) { this.save(this.get().filter(x=>x.id!==id)); } };
         
         function goPage(page) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            document.querySelectorAll('.nav-card').forEach(c => c.classList.remove('active'));
             document.getElementById('page-'+page).classList.add('active');
-            const pages = ['home','jarvis','trading','tasks','notes'];
-            if(pages.includes(page)) document.querySelectorAll('.nav-item')[pages.indexOf(page)].classList.add('active');
-            if(page==='tasks')renderงาน();
-            if(page==='notes')renderโน้ต();
-            if(page==='alerts')renderแจ้งเตือน();
-            if(page==='home')renderหน้าหลักงาน();
+            
+            const pageMap = {'home':0,'jarvis':1,'trading':2,'tasks':3,'notes':4};
+            if(pageMap[page] !== undefined) document.querySelectorAll('.nav-item')[pageMap[page]].classList.add('active');
+            if(page === 'tasks') renderTasks();
+            if(page === 'notes') renderNotes();
+            if(page === 'alerts') renderAlerts();
+            if(page === 'home') renderHomeTasks();
         }
         
-        function renderงาน() { const t = TaskManager.get(); document.getElementById('task-list').innerHTML = t.length ? t.map(x => '<div class="task-item"><div class="task-check '+ (x.done?'done':'') +'" onclick="TaskManager.toggle('+x.id+');renderงาน()">'+(x.done?'✓':'')+'</div><div class="task-content"><div class="task-title" style="'+(x.done?'text-decoration:line-through;opacity:0.5':'')+'">'+x.title+'</div><div class="task-due">'+x.due+'</div></div><div class="task-priority '+x.priority+'">'+x.priority.toUpperCase()+'</div><div style="color:var(--danger);cursor:pointer" onclick="TaskManager.delete('+x.id+');renderงาน()">🗑️</div></div>').join('') : '<div class="empty">ยังไม่มี Task</div>'; }
-        function renderหน้าหลักงาน() { const t = TaskManager.get().filter(x=>!x.done).slice(0,3); document.getElementById('task-count').textContent = '('+TaskManager.get().length+' tasks)'; document.getElementById('home-tasks').innerHTML = t.length ? t.map(x => '<div class="task-item"><div class="task-check" onclick="TaskManager.toggle('+x.id+');renderหน้าหลักงาน()"></div><div class="task-content"><div class="task-title">'+x.title+'</div><div class="task-due">'+x.due+'</div></div><div class="task-priority '+x.priority+'">'+x.priority.toUpperCase()+'</div></div>').join('') : '<div style="color:var(--text2);text-align:center;padding:10px">ไม่มีงานค้าง ✅</div>'; }
-        function renderโน้ต() { const n = NoteManager.get(); document.getElementById('note-list').innerHTML = n.length ? n.map(x => '<div class="note-item"><div class="note-title">'+x.title+'</div><div class="note-preview">'+x.content+'</div><div style="display:flex;justify-content:space-between;margin-top:8px"><span style="font-size:0.7rem;color:var(--text3)">'+x.date+'</span><span style="color:var(--danger);cursor:pointer" onclick="NoteManager.delete('+x.id+');renderโน้ต()">🗑️ ลบ</span></div></div>').join('') : '<div class="empty">ยังไม่มี Note</div>'; }
-        function renderแจ้งเตือน() { const a = AlertManager.get(); document.getElementById('alert-list').innerHTML = a.length ? a.map(x => '<div class="alert-item"><div><div style="font-weight:700">'+x.symbol+'</div><div style="font-size:0.85rem;color:var(--text2)">'+(x.type==='above'?'🔺':'🔻')+' '+x.price+'</div></div><div style="color:var(--danger);cursor:pointer" onclick="AlertManager.delete('+x.id+');renderแจ้งเตือน()">🗑️</div></div>').join('') : '<div class="empty">ยังไม่มี Alert</div>'; }
+        function renderTasks() {
+            const t = TaskManager.get();
+            document.getElementById('task-list').innerHTML = t.length ? t.map(x => '<div class="task-item"><div class="task-check '+(x.done?'done':'')+'" onclick="TaskManager.toggle('+x.id+');renderTasks()">'+(x.done?'✓':'')+'</div><div class="task-content"><div class="task-title" style="'+(x.done?'text-decoration:line-through;opacity:0.5':'')+'">'+x.title+'</div><div class="task-due">'+x.due+'</div></div><div class="task-priority '+x.priority+'">'+x.priority.toUpperCase()+'</div><div style="color:var(--danger);cursor:pointer" onclick="TaskManager.delete('+x.id+');renderTasks()">🗑️</div></div>').join('') : '<div class="empty">ยังไม่มีงาน</div>';
+        }
+        
+        function renderHomeTasks() {
+            const t = TaskManager.get().filter(x=>!x.done).slice(0,3);
+            document.getElementById('task-count').textContent = '('+TaskManager.get().length+' งาน)';
+            document.getElementById('home-tasks').innerHTML = t.length ? t.map(x => '<div class="task-item"><div class="task-check" onclick="TaskManager.toggle('+x.id+');renderHomeTasks()"></div><div class="task-content"><div class="task-title">'+x.title+'</div><div class="task-due">'+x.due+'</div></div><div class="task-priority '+x.priority+'">'+x.priority.toUpperCase()+'</div></div>').join('') : '<div style="color:var(--text2);text-align:center;padding:10px">ไม่มีงานค้าง ✅</div>';
+        }
+        
+        function renderNotes() {
+            const n = NoteManager.get();
+            document.getElementById('note-list').innerHTML = n.length ? n.map(x => '<div class="note-item"><div class="note-title">'+x.title+'</div><div class="note-preview">'+x.content+'</div><div style="display:flex;justify-content:space-between;margin-top:8px"><span style="font-size:0.7rem;color:var(--text3)">'+x.date+'</span><span style="color:var(--danger);cursor:pointer" onclick="NoteManager.delete('+x.id+');renderNotes()">🗑️ ลบ</span></div></div>').join('') : '<div class="empty">ยังไม่มีโน้ต</div>';
+        }
+        
+        function renderAlerts() {
+            const a = AlertManager.get();
+            document.getElementById('alert-list').innerHTML = a.length ? a.map(x => '<div class="alert-item"><div><div style="font-weight:700">'+x.symbol+'</div><div style="font-size:0.85rem;color:var(--text2)">'+(x.type==='above'?'🔺':'🔻')+' '+x.price+'</div></div><div style="color:var(--danger);cursor:pointer" onclick="AlertManager.delete('+x.id+');renderAlerts()">🗑️</div></div>').join('') : '<div class="empty">ยังไม่มีการแจ้งเตือน</div>';
+        }
         
         function showAddTask() { document.getElementById('add-task-box').style.display = document.getElementById('add-task-box').style.display==='none'?'block':'none'; }
         function showAddNote() { document.getElementById('add-note-box').style.display = document.getElementById('add-note-box').style.display==='none'?'block':'none'; }
         function showAddAlert() { document.getElementById('add-alert-box').style.display = document.getElementById('add-alert-box').style.display==='none'?'block':'none'; }
         
-        function addTask(p) { const t = document.getElementById('new-task-title').value.trim(); if(t){TaskManager.add(t,p);document.getElementById('new-task-title').value='';showAddTask();renderงาน();} }
-        function addNote() { const ti = document.getElementById('new-note-title').value.trim(); const c = document.getElementById('new-note-content').value.trim(); if(ti&&c){NoteManager.add(ti,c);document.getElementById('new-note-title').value='';document.getElementById('new-note-content').value='';showAddNote();renderโน้ต();} }
-        function addAlert() { const s = document.getElementById('new-alert-symbol').value.trim(); const p = document.getElementById('new-alert-price').value; const t = document.getElementById('new-alert-type').value; if(s&&p){AlertManager.add(s,p,t);document.getElementById('new-alert-symbol').value='';document.getElementById('new-alert-price').value='';showAddAlert();renderแจ้งเตือน();} }
+        function addTask(p) { const t = document.getElementById('new-task-title').value.trim(); if(t){TaskManager.add(t,p);document.getElementById('new-task-title').value='';showAddTask();renderTasks();} }
+        function addNote() { const ti = document.getElementById('new-note-title').value.trim(); const c = document.getElementById('new-note-content').value.trim(); if(ti&&c){NoteManager.add(ti,c);document.getElementById('new-note-title').value='';document.getElementById('new-note-content').value='';showAddNote();renderNotes();} }
+        function addAlert() { const s = document.getElementById('new-alert-symbol').value.trim(); const p = document.getElementById('new-alert-price').value; const t = document.getElementById('new-alert-type').value; if(s&&p){AlertManager.add(s,p,t);document.getElementById('new-alert-symbol').value='';document.getElementById('new-alert-price').value='';showAddAlert();renderAlerts();} }
         
         function sendCommand() { const cmd = document.getElementById('jarvis-input').value.trim(); if(!cmd)return; const chat = document.getElementById('chat-history'); chat.innerHTML += '<div class="card"><h3>👤 คุณเบส</h3><div style="color:var(--text2)">'+cmd+'</div></div>'; chat.innerHTML += '<div class="card" style="border-left-color:var(--success)"><h3>🤖 จาร์วิส</h3><div style="color:var(--text2)">ได้รับคำสั่ง: "'+cmd+'"<br>💖 กำลังดำเนินการ...</div></div>'; document.getElementById('jarvis-input').value = ''; chat.parentElement.scrollTop = chat.parentElement.scrollHeight; }
         function quickCmd(cmd) { document.getElementById('jarvis-input').value = cmd; sendCommand(); }
-        function refreshAll() { renderหน้าหลักงาน(); }
-        function fetchระบบStatus() { document.getElementById('sys-gateway').textContent='พร้อม'; }
+        function refreshAll() { renderHomeTasks(); }
+        function fetchSystemStatus() { document.getElementById('sys-gateway').textContent='พร้อม'; }
         function fetchPrices() { document.getElementById('gold-price').textContent='$5,175.00'; document.getElementById('btc-price').textContent='$84,500'; }
         
-        renderงาน(); renderโน้ต(); renderแจ้งเตือน(); renderหน้าหลักงาน();
+        renderTasks(); renderNotes(); renderAlerts(); renderHomeTasks();
     </script>
 </body>
 </html>
